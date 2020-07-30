@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Administración de Empleados</title>
+    </h:head>
+    <h:body>
+        <f:event listener="#{incioSesionManejador.confirmarSesion()}" type="preRenderView"/>
+        <h:form id="inicioSesion">
+        <p:growl id="growl" life="2000"/>
+        <p:commandButton value="Iniciar Sesión" type="button" onclick="PF('modalIniciarSesion').show();" />
+            
+        
+        <p:dialog id="modal" header="Inicio de Sesión" widgetVar="modalIniciarSesion" modal="true" height="100">
+            
+                
+                <div class="p-field p-grid">
+                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Usuario: " />
+                    <div class="p-col">
+                        <p:inputText id="nombre" value="#{incioSesionManejador.usuario.usuNombre}" required="true"/>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Contraseña: " />
+                    <div class="p-col">
+                        <p:password id="contrasena" value="#{incioSesionManejador.usuario.usuContrasena}" required="true"/>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="E-mail: " />
+                    <div class="p-col">
+                        <p:inputText id="correo" value="#{incioSesionManejador.usuario.usuCorreo}" required="true"/>
+                    </div>
+                </div>
+            <p:commandButton ajax="false" value="Ingresar" update="growl, nombre, contrasena, correo" action="#{incioSesionManejador.validacion()}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+            
+        </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+
