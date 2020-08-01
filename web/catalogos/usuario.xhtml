@@ -3,27 +3,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
         <f:event listener="#{incioSesionManejador.validarSesion()}" type="preRenderView"/>
-        <h1>BIENVENIDO USUARIO</h1>
-        
-        <h:form> 
-            <p:growl id="growl" life="2000" />
+        <ui:composition template="plantilla.xhtml">
+            <ui:define name="contenido">
+                <h1>BIENVENIDO USUARIO</h1>
 
-            <p:commandButton value="Ajax Submit" id="ajax" update="growl" action="#{inicioSesionManejador.buttonAction}" style="margin-right:20px;" styleClass="ui-priority-primary" />
-
-            <p:commandButton value="Non-Ajax Submit" id="nonAjax" action="#{buttonView.buttonAction}" style="margin-right:20px;" ajax="false" />
-
-            <p:commandButton value="With Icon" id="withIcon" action="#{buttonView.buttonAction}" update="growl" style="margin-right:20px;" icon="pi pi-save" />
-
-            <p:commandButton action="#{buttonView.buttonAction}" id="iconOnly" update="growl" style="margin-right:20px;" icon="pi pi-save" title="Icon Only" />
-
-            <p:commandButton value="Cerrar sesión" action="#{incioSesionManejador.cerrarSesion()}" style="margin-right:20px;"/>   
-        </h:form>
+                <h:form> 
+                    <p:growl id="growl" life="2000" />
+                    <p:commandButton value="Cerrar sesión" action="#{incioSesionManejador.cerrarSesion()}" style="margin-right:20px;"/>   
+                </h:form>
+            </ui:define>
+            <ui:define name="menu">
+                <a class="nav-link" href="rol.xhtml">Gestión de Roles</a>
+                <a class="nav-link" href="usuarios.xhtml">Gestión de Usuarios</a>
+                <a class="nav-link" href="estados.xhtml">Gestión de Estados</a>
+                <a class="nav-link" href="departamentos.xhtml">Gestión de Departamentos</a>
+                <a class="nav-link" href="puestos.xhtml">Gestión de Puestos</a>
+                <a class="nav-link" href="descuentos.xhtml">Descuentos de Ley</a>
+                <a class="nav-link" href="renta.xhtml">Tramos de Renta</a>
+                <a class="nav-link" href="usuarios.xhtml">Fecha de pago de Planilla</a>
+            </ui:define>
+        </ui:composition>
     </h:body>
 </html>
 

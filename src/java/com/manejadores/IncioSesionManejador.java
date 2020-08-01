@@ -35,11 +35,11 @@ public class IncioSesionManejador {
     @PostConstruct
     public void inicializar(){
         usuario = new AdmUsuUsuario();
-        usuarioControlador = new UsuarioControlador();
+        usuarioControlador = new UsuarioControlador(usuario);
     }
     
     public void validacion() throws IOException{
-        usuarioControlador = new UsuarioControlador();
+        usuarioControlador = new UsuarioControlador(usuario);
         usuarioControlador.getEntityManager();
         usuarioEncontrado = usuarioControlador.validarUsuario(usuario);
         
@@ -49,7 +49,7 @@ public class IncioSesionManejador {
         }
         else{
             mandarCorreo();
-            Utilidades.redireccion("validacion-correo.xhtml");
+            Utilidades.redireccion("validacion-correo");
         }
         
     }
@@ -71,35 +71,35 @@ public class IncioSesionManejador {
         if(numero == codigoAutenticacion){
             Utilidades.mensajeExito("Credenciales correctas");
             if(usuarioEncontrado.getRolId().getRolId() == 1){
-                Utilidades.redireccion("catalogos/administrador.xhtml");
+                Utilidades.redireccion("catalogos/administrador");
             }
             else if(usuarioEncontrado.getRolId().getRolId() == 3){
-                Utilidades.redireccion("catalogos/usuario.xhtml");
+                Utilidades.redireccion("catalogos/usuario");
             }
         }
         else{
             Utilidades.mensajeError("Código incorrecto");
         }
-        codigoAutenticacion = 0;
-        numero = 0;
+//        codigoAutenticacion = 0;
+//        numero = 0;
     }
     
     public void validarSesion() throws IOException{
-        if(usuario.getUsuNombre() == null){
-            Utilidades.redireccion("../index.xhtml");
+        if(usuario.getUsuNombre() == null && numero == codigoAutenticacion){
+            Utilidades.redireccion("index");
         }
     }
     
     public void cerrarSesion() throws IOException{
         usuario.setUsuNombre(null);
         usuario.setUsuCorreo(null);
-        Utilidades.redireccion("../index.xhtml");
+        Utilidades.redireccion("index");
     }
     
     public void confirmarSesion() throws IOException{
         if(usuario.getUsuNombre() != null){
             System.out.println("funciona");
-            Utilidades.redireccion("faces/confirmacion.xhtml");
+            Utilidades.redireccion("confirmacion");
         }
         else{
             System.out.println("no funciona");

@@ -3,6 +3,7 @@ package utilidades;
 
 import java.io.IOException;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
@@ -22,6 +23,7 @@ public class Utilidades {
     }
     
     public static void redireccion(String url) throws IOException{
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        context.redirect(context.getRequestContextPath() + "/faces/" + url + ".xhtml");
     } 
 }

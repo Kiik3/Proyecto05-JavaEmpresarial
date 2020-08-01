@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="administrador.xhtml">
+            <ui:define name="contenido">
+                <div style="margin: 20px;">
+                    <h1 style="display: inline">EMPLEADOS</h1>
+                <h:form style="display: inline">
+                    <p:commandButton actionListener="#{empleadoManejador.nuevaEntidad()}" value="Ingresar nuevo empleado" oncomplete="PF('modalInsertar').show();" style="float: right" />
+                </h:form>
+                
+                    <p:dataTable var="emp" value="#{empleadoManejador.empleados}" id="table" draggableColumns="true" reflow="true" paginator="true" rows="10">
+                    <p:column headerText="Id" colspan="1">
+                        <h:outputText value="#{emp.empId}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" colspan="2">
+                        <h:outputText value="#{emp.empNombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellido" colspan="2">
+                        <h:outputText value="#{emp.empApellido}"/>
+                    </p:column>
+                    <p:column headerText="Correo" colspan="3">
+                        <h:outputText value="#{emp.empCorreo}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Contratación" colspan="3">
+                        <h:outputText value="#{emp.empFechaContratacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Salario" colspan="2">
+                        <h:outputText value="#{emp.empSalario}"/>
+                    </p:column>
+                    <p:column headerText="Puesto" colspan="2">
+                        <h:outputText value="#{emp.pueId.pueNombre}"/>
+                    </p:column>
+                    <p:column headerText="Departamento" colspan="3">
+                        <h:outputText value="#{emp.pueId.admDepDepartamento.depNombre}"/>
+                    </p:column>
+                    <p:column headerText="Jefe" colspan="2">
+                        <h:outputText value="#{emp.empIdJefe.empNombre}"/>
+                    </p:column>
+                    <p:column headerText="Estado" colspan="2">
+                        <h:outputText value="#{emp.estId.estNombre}"/>
+                    </p:column>
+                    <p:column headerText="Acción" style="text-align: center" colspan="3">
+                        <h:form> 
+                            <p:growl id="growl" life="2000" />
+
+                            <p:commandButton value="Editar" update="formEdit" oncomplete="PF('modalEditar').show();" style="margin-right: 10px;"/>
+
+                            <p:dialog id="formEdit" header="Actualización de datos" widgetVar="modalEditar" modal="true" height="200" responsive="true">
+
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Nombre: " />
+                                    <p:inputText value="#{usu.usuNombre}" required="true"/>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Contraseña: " />
+                                    <p:password value="#{usu.usuContrasena}" required="true"/>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Correo: " />
+                                    <p:inputText type="email" value="#{usu.usuCorreo}" required="true"/>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Rol: " />
+                                    <p:selectOneMenu value="#{rolManejador.claseEntidad.rolId}" style="width:125px">
+                                        <f:selectItems var="rol" value="#{rolManejador.roles}" itemLabel="#{rol.rolNombre}" itemValue="#{rol.rolId}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                
+                                <div>
+                                    <p:commandButton action="#{usuarioManejador.actualizar(rolManejador.claseEntidad.rolId, usu)}" id="editar" update="growl, table" value="Actualizar" style="margin-top: 10px;"/>
+                                </div>
+                            </p:dialog>
+
+                            <p:commandButton action="#{usuarioManejador.eliminar(usu)}" id="eliminar" update="growl, table" icon="pi pi-trash" style="background-color: tomato; border-color: red" immediate="true">
+                                <p:confirm header="Confirmación" message="Está seguro?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                            </p:confirmDialog> 
+                        </h:form>
+                    </p:column>
+
+                </p:dataTable>
+                    </div>
+                
+                <p:dialog header="Ingresar Empleado" widgetVar="modalInsertar" modal="true" height="400" responsive="true">
+                    <h:form id="formInsertar">
+                        <p:growl id="growl" life="2000" />
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Nombre: " />
+                            <p:inputText value="#{empleadoManejador.claseEntidad.empNombre}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Apellido: " />
+                            <p:inputText value="#{empleadoManejador.claseEntidad.empApellido}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Correo: " />
+                            <p:inputText type="email" value="#{empleadoManejador.claseEntidad.empCorreo}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Fecha Contratación: " />
+                            <p:datePicker value="#{empleadoManejador.claseEntidad.empFechaContratacion}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Identificación: " />
+                            <p:inputText value="#{empleadoManejador.claseEntidad.empIdentificacion}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Teléfono: " />
+                            <p:inputText value="#{empleadoManejador.claseEntidad.empTelefono}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Fecha Nacimiento: " />
+                            <p:datePicker value="#{empleadoManejador.claseEntidad.empFechaNacimiento}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Salario: " />
+                            <p:inputNumber minValue="0" value="#{empleadoManejador.claseEntidad.empSalario}" required="true"/>
+                        </div>
+                        
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Jefe: " />
+                            <p:selectOneMenu value="#{empleadoManejador.claseEntidad.empIdJefe.empId}" style="width:125px">
+                                <f:selectItem itemValue="#{0}" itemLabel="Sin Jefe"/>
+                                <f:selectItems var="emp" value="#{empleadoManejador.jefes}" itemLabel="#{emp.empNombre}" itemValue="#{emp.empId}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Puesto: " />
+                            <p:selectOneMenu value="#{empleadoManejador.claseEntidad.pueId.admPuePuestoTrabajoPK.pueId}" style="width:125px">
+                                <f:selectItems var="pue" value="#{puestoManejador.puestos}" itemLabel="#{pue.pueNombre}" itemValue="#{pue.admPuePuestoTrabajoPK.pueId}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        
+
+                        <div>
+                            <p:commandButton resetValues="false" action="#{empleadoManejador.insertar()}" id="insertar" update="growl, table, formInsertar" value="Ingresar" style="margin-top: 10px;"/>
+                        </div>
+                    </h:form>
+                </p:dialog> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

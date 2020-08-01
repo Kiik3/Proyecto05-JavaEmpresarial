@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="usuario.xhtml">
+            <ui:define name="contenido">
+                <div style="margin: 20px;">
+                    <h1 style="display: inline">DESCUENTOS DE LEY</h1>
+                <h:form style="display: inline">
+                    <p:commandButton actionListener="#{descuentoManejador.nuevaEntidad()}" value="Ingresar nuevo descuento" oncomplete="PF('modalInsertar').show();" style="float: right" />
+                </h:form>
+                
+                    <p:dataTable var="des" value="#{descuentoManejador.descuentos}" id="table" draggableColumns="true" reflow="true" paginator="true" rows="10">
+                    <p:column headerText="Id">
+                        <h:outputText value="#{des.desId}"/>
+                    </p:column>
+                    <p:column headerText="Descuento de Ley">
+                        <h:outputText value="#{des.desNombre}"/>
+                    </p:column>
+                    <p:column headerText="Porcentaje">
+                        <h:outputText value="#{des.desPorcentaje}"/>
+                    </p:column>
+                    <p:column headerText="Acción" style="text-align: center">
+                        <h:form> 
+                            <p:growl id="growl" life="2000" />
+
+                            <p:commandButton value="Editar" update="formEdit" oncomplete="PF('modalEditar').show();" style="margin-right: 10px;"/>
+
+                            <p:dialog id="formEdit" header="Actualización de datos" widgetVar="modalEditar" modal="true" height="200" responsive="true">
+
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Descuento: " />
+                                    <p:inputText value="#{des.desNombre}" required="true"/>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Porcentaje: " />
+                                    <p:inputNumber minValue="0" value="#{des.desPorcentaje}" required="true"/>
+                                </div>
+                                
+                                <div>
+                                    <p:commandButton action="#{descuentoManejador.actualizar(des)}" id="editar" update="growl, table" value="Actualizar" style="margin-top: 10px;"/>
+                                </div>
+                            </p:dialog>
+
+                            <p:commandButton action="#{descuentoManejador.eliminar(des)}" id="eliminar" update="growl, table" icon="pi pi-trash" style="background-color: tomato; border-color: red" immediate="true">
+                                <p:confirm header="Confirmación" message="Está seguro?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                            </p:confirmDialog> 
+                        </h:form>
+                    </p:column>
+
+                </p:dataTable>
+                    </div>
+                
+                <p:dialog header="Ingresar Descuento de Ley" widgetVar="modalInsertar" modal="true" height="200">
+                    <h:form>
+                        <p:growl id="growl" life="2000" />
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Descuento: " />
+                            <p:inputText value="#{descuentoManejador.claseEntidad.desNombre}" required="true"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Porcentaje: " />
+                            <p:inputNumber minValue="0" value="#{descuentoManejador.claseEntidad.desPorcentaje}" required="true"/>
+
+                        </div>
+
+                        <div>
+                            <p:commandButton action="#{descuentoManejador.insertar()}" id="insertar" update="growl, table" value="Ingresar" style="margin-top: 10px;"/>
+                        </div>
+                    </h:form>
+                </p:dialog> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
