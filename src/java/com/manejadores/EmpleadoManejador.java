@@ -24,11 +24,13 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     
     private List<AdmEmpEmpleado> empleados = new ArrayList<AdmEmpEmpleado>();
     private List<AdmEmpEmpleado> jefes = new ArrayList<AdmEmpEmpleado>();
+    private boolean flagEstado = true;
     
     @PostConstruct
     @Override
     public void inicializar(){
         claseEntidad = new AdmEmpEmpleado();
+        claseEntidad.setEstId(new AdmEstEstado());
         claseEntidad.setEmpIdJefe(new AdmEmpEmpleado());
         claseEntidad.setPueId(new AdmPuePuestoTrabajo(new AdmPuePuestoTrabajoPK()));
         claseEntidadControlador = new EmpleadoControlador(claseEntidad);
@@ -40,41 +42,31 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     @Override
     public void nuevaEntidad(){
         claseEntidad = new AdmEmpEmpleado();
-        claseEntidad.setEmpIdJefe(new AdmEmpEmpleado());
+        claseEntidad.setEstId(new AdmEstEstado());
         claseEntidad.setEmpIdJefe(new AdmEmpEmpleado());
         claseEntidad.setPueId(new AdmPuePuestoTrabajo(new AdmPuePuestoTrabajoPK()));
         claseEntidadControlador = new EmpleadoControlador(claseEntidad);
         claseEntidadControlador.getEntityManager();
+
+        flagEstado = false;
     }
     
     @Override
     public void insertar(){
-        AdmEstEstado estado = new AdmEstEstado(1);
-        claseEntidad.setEstId(estado);
         int i = claseEntidad.getPueId().getAdmPuePuestoTrabajoPK().getPueId();
         AdmPuePuestoTrabajo puesto = (AdmPuePuestoTrabajo) claseEntidadControlador.encontrarPorId(i);
-        claseEntidad.getPueId().getAdmPuePuestoTrabajoPK().setDepId(puesto.getAdmPuePuestoTrabajoPK().getDepId());
-        
+
         if(claseEntidad.getEmpSalario() < puesto.getPueSalarioMinimo() || claseEntidad.getEmpSalario() > puesto.getPueSalarioMaximo()){
             Utilidades.mensajeError("El salario según el puesto escogido no debe ser menor a " + puesto.getPueSalarioMinimo() + ", ni mayor a " + puesto.getPueSalarioMaximo());
         }
         else{
-            claseEntidadControlador.insertarEntidad();
-            Utilidades.mensajeExito("Ingresado correctamente");
+            claseEntidadControlador.actualizarEntidad(claseEntidad);
+            Utilidades.mensajeExito("Realizado correctamente");
             inicializar();
             
         }
-        
-        
-        
+   
     }
-//    
-//    public void actualizar(int id, AdmEmpEmpleado empleado){        
-//        empleado.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id));
-//        claseEntidadControlador.actualizarEntidad(empleado);
-//        Utilidades.mensajeExito("Ingresado correctamente");
-//        inicializar();
-//    }
 
     public List<AdmEmpEmpleado> getEmpleados() {
         return empleados;
@@ -90,6 +82,14 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
 
     public void setJefes(List<AdmEmpEmpleado> jefes) {
         this.jefes = jefes;
+    }
+
+    public boolean isFlagEstado() {
+        return flagEstado;
+    }
+
+    public void setFlagEstado(boolean flagEstado) {
+        this.flagEstado = flagEstado;
     }
 
 }

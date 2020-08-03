@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author Enrique Ochoa
  */
 
-@ManagedBean
+@ManagedBean(name = "descuentoManejador")
+@ViewScoped
 public class DescuentoManejador extends AbastractoManejador<AdmDesDescuentoLey>{
     
     private List<AdmDesDescuentoLey> descuentos = new ArrayList<AdmDesDescuentoLey>();

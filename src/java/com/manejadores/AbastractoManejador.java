@@ -18,7 +18,7 @@ public abstract class AbastractoManejador<T> {
     protected List<T> listaEntidad = new ArrayList<T>();
     
     public void insertar(){
-        claseEntidadControlador.insertarEntidad();
+        claseEntidadControlador.actualizarEntidad(claseEntidad);
         Utilidades.mensajeExito("Ingresado correctamente");
         inicializar();
     }
@@ -38,8 +38,7 @@ public abstract class AbastractoManejador<T> {
         } catch (Exception e) {
             Utilidades.mensajeError("No se pudo eliminar por dependencias");
         }
-        
-        
+
     }
     
     public T getClaseEntidad() {

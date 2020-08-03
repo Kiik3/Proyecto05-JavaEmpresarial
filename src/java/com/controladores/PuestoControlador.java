@@ -4,6 +4,7 @@ package com.controladores;
 import com.conexionBD.ConexionBD;
 import com.entidades.AdmDepDepartamento;
 import com.entidades.AdmPuePuestoTrabajo;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -27,6 +28,23 @@ public class PuestoControlador extends AbstractoControlador<AdmPuePuestoTrabajo>
             departamentoEncontrado = (AdmDepDepartamento) q.getSingleResult();
             
             return departamentoEncontrado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            em.close();
+        }
+    }
+    
+    @Override
+    public List<AdmPuePuestoTrabajo> encontrarPuestos(int id){
+        em = getEntityManager();
+        try {
+            Query q = em.createQuery("SELECT u FROM AdmPuePuestoTrabajo u WHERE u.admPuePuestoTrabajoPK.depId = :id");
+            q.setParameter("id", id);
+
+            return q.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

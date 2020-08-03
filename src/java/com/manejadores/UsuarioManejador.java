@@ -48,7 +48,7 @@ public class UsuarioManejador extends AbastractoManejador<AdmUsuUsuario>{
     public void actualizar(int id, AdmUsuUsuario usuario){        
         usuario.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id));
         claseEntidadControlador.actualizarEntidad(usuario);
-        Utilidades.mensajeExito("Ingresado correctamente");
+        Utilidades.mensajeExito("Actualizado correctamente");
         inicializar();
     }
 

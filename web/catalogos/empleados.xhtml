@@ -9,12 +9,12 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <ui:composition template="administrador.xhtml">
+        <ui:composition template="usuario.xhtml">
             <ui:define name="contenido">
                 <div style="margin: 20px;">
                     <h1 style="display: inline">EMPLEADOS</h1>
                 <h:form style="display: inline">
-                    <p:commandButton actionListener="#{empleadoManejador.nuevaEntidad()}" value="Ingresar nuevo empleado" oncomplete="PF('modalInsertar').show();" style="float: right" />
+                    <p:commandButton update="form" actionListener="#{empleadoManejador.nuevaEntidad()}" value="Ingresar nuevo empleado" oncomplete="PF('modalForm').show();" style="float: right" />
                 </h:form>
                 
                     <p:dataTable var="emp" value="#{empleadoManejador.empleados}" id="table" draggableColumns="true" reflow="true" paginator="true" rows="10">
@@ -44,8 +44,8 @@
                     <p:column headerText="Departamento" colspan="3">
                         <h:outputText value="#{emp.pueId.admDepDepartamento.depNombre}"/>
                     </p:column>
-                    <p:column headerText="Jefe" colspan="2">
-                        <h:outputText value="#{emp.empIdJefe.empNombre}"/>
+                    <p:column headerText="Jefe" colspan="2">     
+                        <h:outputText value="#{emp.empIdJefe.empNombre}"/>                      
                     </p:column>
                     <p:column headerText="Estado" colspan="2">
                         <h:outputText value="#{emp.estId.estNombre}"/>
@@ -54,35 +54,12 @@
                         <h:form> 
                             <p:growl id="growl" life="2000" />
 
-                            <p:commandButton value="Editar" update="formEdit" oncomplete="PF('modalEditar').show();" style="margin-right: 10px;"/>
+                            <p:commandButton value="Editar" update="form" oncomplete="PF('modalForm').show();" style="margin-right: 10px;">
+                                <f:setPropertyActionListener value="#{emp}" target="#{empleadoManejador.claseEntidad}" />
+                                <f:setPropertyActionListener value="#{true}" target="#{empleadoManejador.flagEstado}" />
+                            </p:commandButton>
 
-                            <p:dialog id="formEdit" header="Actualización de datos" widgetVar="modalEditar" modal="true" height="200" responsive="true">
-
-                                <div class="p-field p-grid">
-                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Nombre: " />
-                                    <p:inputText value="#{usu.usuNombre}" required="true"/>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Contraseña: " />
-                                    <p:password value="#{usu.usuContrasena}" required="true"/>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Correo: " />
-                                    <p:inputText type="email" value="#{usu.usuCorreo}" required="true"/>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Rol: " />
-                                    <p:selectOneMenu value="#{rolManejador.claseEntidad.rolId}" style="width:125px">
-                                        <f:selectItems var="rol" value="#{rolManejador.roles}" itemLabel="#{rol.rolNombre}" itemValue="#{rol.rolId}"/>
-                                    </p:selectOneMenu>
-                                </div>
-                                
-                                <div>
-                                    <p:commandButton action="#{usuarioManejador.actualizar(rolManejador.claseEntidad.rolId, usu)}" id="editar" update="growl, table" value="Actualizar" style="margin-top: 10px;"/>
-                                </div>
-                            </p:dialog>
-
-                            <p:commandButton action="#{usuarioManejador.eliminar(usu)}" id="eliminar" update="growl, table" icon="pi pi-trash" style="background-color: tomato; border-color: red" immediate="true">
+                            <p:commandButton action="#{empleadoManejador.eliminar(emp)}" id="eliminar" update="growl, table" icon="pi pi-trash" style="background-color: tomato; border-color: red" immediate="true">
                                 <p:confirm header="Confirmación" message="Está seguro?" icon="pi pi-exclamation-triangle" />
                             </p:commandButton>
                             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -95,8 +72,8 @@
                 </p:dataTable>
                     </div>
                 
-                <p:dialog header="Ingresar Empleado" widgetVar="modalInsertar" modal="true" height="400" responsive="true">
-                    <h:form id="formInsertar">
+                <p:dialog header="Empleado" widgetVar="modalForm" modal="true" height="450" responsive="true">
+                    <h:form id="form">
                         <p:growl id="growl" life="2000" />
                         <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Nombre: " />
@@ -130,24 +107,37 @@
                             <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Salario: " />
                             <p:inputNumber minValue="0" value="#{empleadoManejador.claseEntidad.empSalario}" required="true"/>
                         </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel rendered="#{empleadoManejador.flagEstado}" styleClass="p-col-fixed" style="width:100px" value="Estado: " />
+                            <p:selectOneMenu rendered="#{empleadoManejador.flagEstado}" value="#{empleadoManejador.claseEntidad.estId.estId}" style="width:125px">
+                                <f:selectItems var="est" value="#{estadoManejador.estados}" itemLabel="#{est.estNombre}" itemValue="#{est.estId}"/>
+                            </p:selectOneMenu>
+                        </div>
                         
                         <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Jefe: " />
                             <p:selectOneMenu value="#{empleadoManejador.claseEntidad.empIdJefe.empId}" style="width:125px">
-                                <f:selectItem itemValue="#{0}" itemLabel="Sin Jefe"/>
+                                <f:selectItem itemValue="#{null}" itemLabel="Sin Jefe"/>
                                 <f:selectItems var="emp" value="#{empleadoManejador.jefes}" itemLabel="#{emp.empNombre}" itemValue="#{emp.empId}"/>
                             </p:selectOneMenu>
                         </div>
                         <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Departamento: " />
+                            <p:selectOneMenu value="#{empleadoManejador.claseEntidad.pueId.admPuePuestoTrabajoPK.depId}" style="width:125px">
+                                <f:selectItems var="dep" value="#{departamentoManejador.departamentos}" itemLabel="#{dep.depNombre}" itemValue="#{dep.depId}"/>
+                                <f:ajax listener="#{puestoManejador.puestosSegunDepartamento(empleadoManejador.claseEntidad.pueId.admPuePuestoTrabajoPK.depId)}" render="selectPuestos"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-fixed" style="width:100px" value="Puesto: " />
-                            <p:selectOneMenu value="#{empleadoManejador.claseEntidad.pueId.admPuePuestoTrabajoPK.pueId}" style="width:125px">
-                                <f:selectItems var="pue" value="#{puestoManejador.puestos}" itemLabel="#{pue.pueNombre}" itemValue="#{pue.admPuePuestoTrabajoPK.pueId}"/>
+                            <p:selectOneMenu id="selectPuestos" value="#{empleadoManejador.claseEntidad.pueId.admPuePuestoTrabajoPK.pueId}" style="width:125px">
+                                <f:selectItems var="pue" value="#{puestoManejador.puestosSegunDepartamento}" itemLabel="#{pue.pueNombre}" itemValue="#{pue.admPuePuestoTrabajoPK.pueId}"/>
                             </p:selectOneMenu>
                         </div>
                         
 
                         <div>
-                            <p:commandButton resetValues="false" action="#{empleadoManejador.insertar()}" id="insertar" update="growl, table, formInsertar" value="Ingresar" style="margin-top: 10px;"/>
+                            <p:commandButton action="#{empleadoManejador.insertar()}" id="editar" update="growl, table" value="Enviar" style="margin-top: 10px;"/>
                         </div>
                     </h:form>
                 </p:dialog> 

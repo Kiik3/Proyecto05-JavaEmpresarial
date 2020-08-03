@@ -14,7 +14,7 @@ import javax.faces.bean.ViewScoped;
  * @author Enrique Ochoa
  */
 
-@ManagedBean
+@ManagedBean(name = "rentaManejador")
 @ViewScoped
 public class RentaManejador extends AbastractoManejador<AdmRenRenta>{
     

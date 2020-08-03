@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="usuario.xhtml">
+            <ui:define name="contenido">
+                <div style="margin: 20px;">
+                    <h1 style="display: inline">PLANILLA DE PAGOS, FECHA:<p:outputLabel value="#{historialManejador.claseEntidad.plaId.plaFecha}"></p:outputLabel></h1>
+                
+                
+                    <p:dataTable var="pla" value="#{historialManejador.elementos}" id="table" draggableColumns="true" reflow="true">
+                    <p:column headerText="Id Empleado" colspan="1">
+                        <h:outputText value="#{pla.hisIdEmpleado}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" colspan="2">
+                        <h:outputText value="#{pla.hisNombreEmpleado}"/>
+                    </p:column>
+                    <p:column headerText="Apellido" colspan="2">
+                        <h:outputText value="#{pla.hisApellidoEmpleado}"/>
+                    </p:column>
+                    <p:column headerText="Salario" colspan="2">
+                        <h:outputText value="#{pla.hisSalario}"/>
+                    </p:column>
+                    <p:column headerText="ISSS" colspan="2">
+                        <h:outputText value="#{pla.hisIsss}"/>
+                    </p:column>
+                    <p:column headerText="AFP" colspan="2">
+                        <h:outputText value="#{pla.hisAfp}"/>
+                    </p:column>
+                    <p:column headerText="Renta" colspan="2">
+                        <h:outputText value="#{pla.hisRenta}"/>
+                    </p:column>
+                    <p:column headerText="Pago" colspan="2">
+                        <h:outputText value="#{pla.hisPago}"/>
+                    </p:column>
+
+                </p:dataTable>
+                <p:dataTable var="pla" value="1" styleClass="tabla-personal">
+                    <p:column colspan="3">
+                        <h:outputText value="TOTAL PAGADO"/>
+                    </p:column>
+                    <p:column colspan="1">
+                        <h:outputText value="#{planillaManejador.planilla.plaTotalSalario}"/>
+                    </p:column>
+                    <p:column colspan="4" style="text-align: center;">
+                        <h:outputText value="#{planillaManejador.planilla.plaTotalDescuento}"/>
+                    </p:column>
+                    <p:column colspan="1">
+                        <h:outputText value="#{planillaManejador.planilla.plaTotalPago}"/>
+                    </p:column>
+
+                </p:dataTable>
+                    </div>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

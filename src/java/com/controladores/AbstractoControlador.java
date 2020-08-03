@@ -49,6 +49,7 @@ public abstract class AbstractoControlador<T> {
             em.persist(ClaseEntidad);
             em.getTransaction().commit();
         } catch (Exception e) {
+            e.printStackTrace();
             em.getTransaction().rollback();
         } finally{
             em.close();
@@ -86,6 +87,10 @@ public abstract class AbstractoControlador<T> {
     }
     
     public List<T> encontrarJefes(){
+        return ListaEntidad;
+    }
+    
+    public List<T> encontrarPuestos(int id){
         return ListaEntidad;
     }
     

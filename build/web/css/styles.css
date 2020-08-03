@@ -47,6 +47,10 @@
   box-sizing: border-box;
 }
 
+.tabla-personal thead{
+    display: none;
+}
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
