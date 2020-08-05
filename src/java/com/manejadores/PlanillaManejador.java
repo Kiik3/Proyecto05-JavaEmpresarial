@@ -43,6 +43,7 @@ public class PlanillaManejador {
     
     private List<AdmPlaPlanilla> planillas = new ArrayList<AdmPlaPlanilla>();
     private List<AdmHisHistorialPago> elementos;
+    private boolean flagVerDetalles;
     
     @PostConstruct
     public void inicializar(){
@@ -58,6 +59,7 @@ public class PlanillaManejador {
         planillas = planillaControlador.encontrarEntidades();
         
         historial = new AdmHisHistorialPago();
+        flagVerDetalles = false;
         
 
     }
@@ -74,6 +76,7 @@ public class PlanillaManejador {
             historialControlador.insertarEntidad();
         }
         Utilidades.mensajeExito("Planilla pagada correctamente");
+        inicializar();
     }
     
     public void verDetalles(int id) throws IOException{
@@ -81,7 +84,7 @@ public class PlanillaManejador {
         System.out.println(id);
         System.out.println(elementos);
         planilla = (AdmPlaPlanilla) planillaControlador.encontrarPorId(id);
-//        Utilidades.redireccion("catalogos/historialPagos");
+        flagVerDetalles = true;
     }
 
     public AdmPlaPlanilla getPlanilla() {
@@ -130,6 +133,14 @@ public class PlanillaManejador {
 
     public void setRenta(RentaManejador renta) {
         this.renta = renta;
+    }
+
+    public boolean isFlagVerDetalles() {
+        return flagVerDetalles;
+    }
+
+    public void setFlagVerDetalles(boolean flagVerDetalles) {
+        this.flagVerDetalles = flagVerDetalles;
     }
     
 }

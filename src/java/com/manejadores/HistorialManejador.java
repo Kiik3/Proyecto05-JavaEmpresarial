@@ -3,12 +3,14 @@ package com.manejadores;
 
 import com.controladores.HistorialControlador;
 import com.entidades.AdmHisHistorialPago;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import utilidades.Utilidades;
 
 /**
  *
@@ -23,6 +25,8 @@ public class HistorialManejador extends AbastractoManejador<AdmHisHistorialPago>
     private PlanillaManejador planilla;
     
     private List<AdmHisHistorialPago> empleados = new ArrayList<AdmHisHistorialPago>();
+    private List<AdmHisHistorialPago> pagosEmpleado = new ArrayList<AdmHisHistorialPago>();
+    private boolean detallePago = false;
     
     @PostConstruct
     @Override
@@ -30,8 +34,12 @@ public class HistorialManejador extends AbastractoManejador<AdmHisHistorialPago>
         claseEntidad = new AdmHisHistorialPago();
         claseEntidadControlador = new HistorialControlador(claseEntidad);
         claseEntidadControlador.getEntityManager();
-//        elementos = planilla.getPlanillas();
         empleados = claseEntidadControlador.encontrarEntidades();
+    }
+    
+    public void historialEmpleado(AdmHisHistorialPago emp) throws IOException{
+        pagosEmpleado = claseEntidadControlador.encontrarPuestos(emp.getHisIdEmpleado());
+        detallePago = true;
     }
 
     @Override
@@ -53,6 +61,22 @@ public class HistorialManejador extends AbastractoManejador<AdmHisHistorialPago>
 
     public void setEmpleados(List<AdmHisHistorialPago> empleados) {
         this.empleados = empleados;
+    }
+
+    public List<AdmHisHistorialPago> getPagosEmpleado() {
+        return pagosEmpleado;
+    }
+
+    public void setPagosEmpleado(List<AdmHisHistorialPago> pagosEmpleado) {
+        this.pagosEmpleado = pagosEmpleado;
+    }
+
+    public boolean isDetallePago() {
+        return detallePago;
+    }
+
+    public void setDetallePago(boolean detallePago) {
+        this.detallePago = detallePago;
     }
     
 }

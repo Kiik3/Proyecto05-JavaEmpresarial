@@ -15,8 +15,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
     </h:head>
     <h:body class="bg-primary">
-        <f:event listener="#{incioSesionManejador.confirmarSesion()}" type="preRenderView"/>
-        
+        <h:panelGroup id="event">
+            
+        </h:panelGroup>
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
@@ -24,9 +25,12 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <h:panelGroup id="login">
+                                        <h:panelGroup rendered="#{!incioSesionManejador.flagAutenticacion}">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
                                     <div class="card-body">
-                                        <h:form id="inicioSesion">
+                                        
+                                        <h:form rendered="#{!incioSesionManejador.flagAutenticacion}" id="inicioSesion">
                                             <p:growl id="growl" life="2000"/>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Nombre</label>
@@ -43,13 +47,45 @@
                                             
                                             
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <p:commandButton ajax="false" value="Ingresar" update="growl, nombre, contrasena, correo" action="#{incioSesionManejador.validacion()}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+                                                <p:commandButton value="Ingresar" update="growl, nombre, contrasena, correo, login, autenticacion, inicioSesion, validacion, event" actionListener="#{incioSesionManejador.validacion()}" style="margin-right:20px;" styleClass="ui-priority-primary" />
                                             </div>
                                         </h:form>
                                     </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!incioSesionManejador.flagAutenticacion}">
                                     <div class="card-footer text-center">
                                         <div class="small">Necesitas una cuenta? Solicita a tu administrador que te registre</div>
                                     </div>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="autenticacion">
+                                        <h:panelGroup rendered="#{incioSesionManejador.flagAutenticacion}">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Autenticación</h3></div>
+                                    <div class="card-body">
+                                        
+                                        <h:form rendered="#{incioSesionManejador.flagAutenticacion}" id="validacion">
+                                            <p:growl id="growl" life="2000"/>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">Código</label>
+                                                <p:inputText maxlength="6" type="number" value="#{incioSesionManejador.codigoAutenticacion}" class="form-control py-4" id="codigo" placeholder="Ingresa el código" required="true"/>
+                                            </div>
+                                            
+                                            
+                                            
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                <p:commandButton ajax="false" value="Autenticar" update="codigo" action="#{incioSesionManejador.validarCodigo()}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+                                                <p:commandButton value="Reenviar correo" update="codigo" action="#{incioSesionManejador.mandarCorreo()}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{incioSesionManejador.flagAutenticacion}">
+                                    <div class="card-footer text-center">
+                                        <div class="small">Ingresa el código de autenticación que se ha mandado al correo electrónico</div>
+                                    </div>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
                                 </div>
                             </div>
                         </div>
@@ -60,18 +96,13 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                            <div class="text-muted">Sistema Administrativo</div>
+                            <div class="text-muted">Proyecto05</div>
                         </div>
                     </div>
                 </footer>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
     </h:body>

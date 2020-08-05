@@ -41,6 +41,23 @@ public class HistorialControlador extends AbstractoControlador<AdmHisHistorialPa
     }
     
     @Override
+    public List<AdmHisHistorialPago> encontrarPuestos(int id){
+        em = getEntityManager();
+        try {
+            Query q = em.createQuery("SELECT u FROM AdmHisHistorialPago u WHERE u.hisIdEmpleado = :id");
+            q.setParameter("id", id);
+            System.out.println(q.getResultList());
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            em.close();
+        }
+    }
+    
+    @Override
     public EntityManager getEntityManager() {
         return ConexionBD.getInstance().getEntityManagerFactory().createEntityManager();
     }

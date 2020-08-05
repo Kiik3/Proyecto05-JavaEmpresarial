@@ -9,10 +9,10 @@
     </h:head>
     <h:body>
         <f:event listener="#{incioSesionManejador.validarSesion()}" type="preRenderView"/>
-        <h:form>
-            <p:commandButton value="Salir" action="#{incioSesionManejador.cerrarSesion()}" style="margin-right:20px;"/>
-            <p:commandButton value="Continuar" action="#{incioSesionManejador.validarCodigo()}" style="margin-right:20px;"/>
-        </h:form>
+        <h:form style="display: inline">
+            <p:commandButton actionListener="#{incioSesionManejador.cerrarSesion()}" value="Salir" style="float: right" />
+            <p:commandButton actionListener="#{incioSesionManejador.confirmarSesion()}" value="Seguir" style="float: right" />
+                </h:form>
     </h:body>
 </html>
 

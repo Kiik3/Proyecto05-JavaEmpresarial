@@ -4,6 +4,7 @@ package com.manejadores;
 import com.controladores.UsuarioControlador;
 import com.entidades.AdmRolRol;
 import com.entidades.AdmUsuUsuario;
+import com.propiedades.Encriptador;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,6 +22,7 @@ import utilidades.Utilidades;
 public class UsuarioManejador extends AbastractoManejador<AdmUsuUsuario>{
     
     private List<AdmUsuUsuario> usuarios = new ArrayList<AdmUsuUsuario>();
+    Encriptador enc = new Encriptador();
     
     @PostConstruct
     @Override
@@ -40,6 +42,7 @@ public class UsuarioManejador extends AbastractoManejador<AdmUsuUsuario>{
 
     public void insertar(int id){        
         claseEntidad.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id));
+        claseEntidad.setUsuContrasena(enc.encriptador(claseEntidad.getUsuContrasena()));
         claseEntidadControlador.insertarEntidad();
         Utilidades.mensajeExito("Ingresado correctamente");
         inicializar();
@@ -47,6 +50,7 @@ public class UsuarioManejador extends AbastractoManejador<AdmUsuUsuario>{
     
     public void actualizar(int id, AdmUsuUsuario usuario){        
         usuario.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id));
+        usuario.setUsuContrasena(enc.encriptador(usuario.getUsuContrasena()));
         claseEntidadControlador.actualizarEntidad(usuario);
         Utilidades.mensajeExito("Actualizado correctamente");
         inicializar();

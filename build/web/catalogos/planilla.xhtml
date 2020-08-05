@@ -23,8 +23,8 @@
                     </p:confirmDialog>
                 </h:form>
                 
-                <p:dataTable var="pla" value="#{planillaManejador.elementos}" id="table" draggableColumns="true" reflow="true">
-                    <p:column headerText="Id Empleado" colspan="1">
+                    <p:dataTable var="pla" value="#{planillaManejador.elementos}" sortBy="#{pla.hisId}" id="table" draggableColumns="true">
+                    <p:column headerText="Id Emp" colspan="1">
                         <h:outputText value="#{pla.hisIdEmpleado}"/>
                     </p:column>
                     <p:column headerText="Nombre" colspan="2">
@@ -48,21 +48,20 @@
                     <p:column headerText="Pago" colspan="2">
                         <h:outputText value="#{pla.hisPago}"/>
                     </p:column>
-
-                </p:dataTable>
-                <p:dataTable var="pla" value="1" styleClass="tabla-personal">
-                    <p:column colspan="3">
-                        <h:outputText value="TOTAL A PAGAR"/>
-                    </p:column>
-                    <p:column colspan="1">
-                        <h:outputText value="#{planillaManejador.planilla.plaTotalSalario}"/>
-                    </p:column>
-                    <p:column colspan="4" style="text-align: center;">
-                        <h:outputText value="#{planillaManejador.planilla.plaTotalDescuento}"/>
-                    </p:column>
-                    <p:column colspan="1">
-                        <h:outputText value="#{planillaManejador.planilla.plaTotalPago}"/>
-                    </p:column>
+                    <p:summaryRow>
+                        <p:column colspan="5">
+                            <h:outputText value="TOTAL A PAGAR"/>
+                        </p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{planillaManejador.planilla.plaTotalSalario}"/>
+                        </p:column>
+                        <p:column colspan="6" style="text-align: center;">
+                            <h:outputText value="#{planillaManejador.planilla.plaTotalDescuento}"/>
+                        </p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{planillaManejador.planilla.plaTotalPago}"/>
+                        </p:column>
+                    </p:summaryRow>
 
                 </p:dataTable>
                     </div>

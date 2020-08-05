@@ -4,6 +4,7 @@ package com.manejadores;
 import com.controladores.UsuarioControlador;
 import com.correo.CorreoElectronico;
 import com.entidades.AdmUsuUsuario;
+import com.propiedades.Encriptador;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,25 +32,31 @@ public class IncioSesionManejador {
     private CorreoElectronico correoElectronico = new CorreoElectronico();
     private int codigoAutenticacion;
     private int numero;
+    private boolean flagAutenticacion;
+    Encriptador enc = new Encriptador();
     
     @PostConstruct
     public void inicializar(){
         usuario = new AdmUsuUsuario();
+        usuarioEncontrado = new AdmUsuUsuario();
         usuarioControlador = new UsuarioControlador(usuario);
+        flagAutenticacion = false;
+        numero = 1;
+        codigoAutenticacion = 0;
     }
     
     public void validacion() throws IOException{
         usuarioControlador = new UsuarioControlador(usuario);
         usuarioControlador.getEntityManager();
         usuarioEncontrado = usuarioControlador.validarUsuario(usuario);
-        
-        if(usuarioEncontrado == null){
+
+        if(usuarioEncontrado == null || !enc.desencriptador(usuarioEncontrado.getUsuContrasena()).equals(usuario.getUsuContrasena())){
             Utilidades.mensajeError("Credenciales incorrectas");
-            usuario.setUsuNombre(null);
+            inicializar();
         }
         else{
             mandarCorreo();
-            Utilidades.redireccion("validacion-correo");
+            flagAutenticacion = true;
         }
         
     }
@@ -76,6 +83,7 @@ public class IncioSesionManejador {
             else if(usuarioEncontrado.getRolId().getRolId() == 3){
                 Utilidades.redireccion("catalogos/usuario");
             }
+            flagAutenticacion = false;
         }
         else{
             Utilidades.mensajeError("Código incorrecto");
@@ -85,24 +93,40 @@ public class IncioSesionManejador {
     }
     
     public void validarSesion() throws IOException{
-        if(usuario.getUsuNombre() == null && numero == codigoAutenticacion){
+        System.out.println(usuario.getUsuNombre());
+        if(usuarioEncontrado.getRolId()== null && numero != codigoAutenticacion){
+            inicializar();
             Utilidades.redireccion("index");
         }
     }
     
+    public void validarAdmin() throws IOException{
+        validarSesion();
+        
+        if(usuarioEncontrado.getRolId().getRolId() != 1){
+            Utilidades.redireccion("catalogos/usuario");
+        }
+    }
+    
+    public void validarUsuario() throws IOException{
+        validarSesion();
+        if(usuarioEncontrado.getRolId().getRolId() != 3){
+            Utilidades.redireccion("catalogos/administrador");
+        }
+    }
+    
     public void cerrarSesion() throws IOException{
-        usuario.setUsuNombre(null);
-        usuario.setUsuCorreo(null);
+        inicializar();
         Utilidades.redireccion("index");
     }
     
     public void confirmarSesion() throws IOException{
-        if(usuario.getUsuNombre() != null){
+        if(usuarioEncontrado.getUsuNombre() != null){
             System.out.println("funciona");
             Utilidades.redireccion("confirmacion");
         }
         else{
-            System.out.println("no funciona");
+            System.out.println("no funciona q putas");
         }
     }
 //    public void destruir(){
@@ -131,6 +155,14 @@ public class IncioSesionManejador {
 
     public void setCodigoAutenticacion(int codigoAutenticacion) {
         this.codigoAutenticacion = codigoAutenticacion;
+    }
+
+    public boolean isFlagAutenticacion() {
+        return flagAutenticacion;
+    }
+
+    public void setFlagAutenticacion(boolean flagAutenticacion) {
+        this.flagAutenticacion = flagAutenticacion;
     }
 
 }

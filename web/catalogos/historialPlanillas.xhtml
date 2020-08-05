@@ -4,6 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
@@ -12,19 +13,17 @@
         <ui:composition template="usuario.xhtml">
             <ui:define name="contenido">
                 <div style="margin: 20px;">
-                    <h1 style="display: inline">HISTORIAL DE PLANILLAS</h1>
-                <h:form style="display: inline">
-                    <p:growl id="growl" life="2000" />
-                    <p:commandButton action="#{planillaManejador.pagar()}" id="pagar" update="growl, table" value="Descargar PDF" style="float: right"/>
-                </h:form>
+                    <h:panelGroup id="fileUploadGroup">
+                    <p:outputLabel rendered="#{!planillaManejador.flagVerDetalles}" value="HISTORIAL DE PLANILLAS" style="display: inline; font-size: x-large"/>
                 
-                    <p:dataTable var="pla" value="#{planillaManejador.planillas}" id="table" draggableColumns="true" reflow="true" paginator="true" rows="10">
+                
+                    <p:dataTable rendered="#{!planillaManejador.flagVerDetalles}" var="pla" value="#{planillaManejador.planillas}" id="table" draggableColumns="true" reflow="true" paginator="true" rows="10">
                     <p:column headerText="Id">
                         <h:outputText value="#{pla.plaId}"/>
                     </p:column>
                     <p:column headerText="Fecha de Pago">
                         <h:outputText value="#{pla.plaFecha}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Total Salario">
@@ -38,62 +37,98 @@
                     </p:column>
                     <p:column headerText="Acción" style="text-align: center">
                         <h:form>
-                            <p:commandButton update="formEdit" oncomplete="PF('modalPlanilla').show();" actionListener="#{planillaManejador.verDetalles(pla.plaId)}" value="Ver detalles" />
+                            <p:commandButton update="fileUploadGroup, fileUploadGroup2" actionListener="#{planillaManejador.verDetalles(pla.plaId)}" value="Ver detalles" />
                         </h:form>
                     </p:column>
                     </p:dataTable>
-                    </div>
-                
-                <p:dialog id="formEdit" header="Detalles Planilla" widgetVar="modalPlanilla" modal="true" height="500" width="850">
-                    <div style="margin: 20px;">
-                        <h3 style="display: inline">PLANILLA DE PAGOS, FECHA:<p:outputLabel value="#{planillaManejador.planilla.plaFecha}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" /></p:outputLabel></h3>
+                    </h:panelGroup>
 
+                    <h:panelGroup id="fileUploadGroup2">
+                        <p:outputLabel rendered="#{planillaManejador.flagVerDetalles}" style="display: inline-block;"><h4>PLANILLA DE PAGOS, FECHA: </h4></p:outputLabel>
+                        
+                        <p:outputLabel rendered="#{planillaManejador.flagVerDetalles}" value="#{planillaManejador.planilla.plaFecha}" style="display: inline-block; font-size: x-large">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </p:outputLabel>
+                        <h:form rendered="#{planillaManejador.flagVerDetalles}" style="display: inline">
+                            <p:growl id="growl" life="2000" />
+                            <p:commandButton action="#{planillaManejador.inicializar()}" id="pagar" update="fileUploadGroup, fileUploadGroup2" value="Regresar" style="float: right"/>
+                        </h:form>
+                        <h:form>
+                            <h:commandLink rendered="#{planillaManejador.flagVerDetalles}" style="float: right">
+                                <img src="../img/logoExcel.jpg" width="50"></img>            
+                                <pe:exporter type="xlsx" target="table2" fileName="planilla-#{planillaManejador.planilla.plaFecha}" />
+                            </h:commandLink>
 
-                        <p:dataTable var="pla" value="#{planillaManejador.elementos}" id="table2" draggableColumns="true" reflow="true">
-                        <p:column headerText="Id Empleado" colspan="1">
+                            <h:commandLink rendered="#{planillaManejador.flagVerDetalles}" style="float: right">
+                                <img src="../img/logoPDF.png" width="24" style="margin-bottom: 8px"></img>
+                                <pe:exporter type="pdf" target="table2" fileName="planilla-#{planillaManejador.planilla.plaFecha}"/>
+                            </h:commandLink>
+                        <p:dataTable style="float: right" rendered="#{planillaManejador.flagVerDetalles}" var="pla" value="#{planillaManejador.elementos}" id="table2"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}">
+                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Id Emp"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisIdEmpleado}"/>
                         </p:column>
-                        <p:column headerText="Nombre" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisNombreEmpleado}"/>
                         </p:column>
-                        <p:column headerText="Apellido" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisApellidoEmpleado}"/>
                         </p:column>
-                        <p:column headerText="Salario" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Salario"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisSalario}"/>
                         </p:column>
-                        <p:column headerText="ISSS" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="ISSS"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisIsss}"/>
                         </p:column>
-                        <p:column headerText="AFP" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="AFP"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisAfp}"/>
                         </p:column>
-                        <p:column headerText="Renta" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Renta"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisRenta}"/>
                         </p:column>
-                        <p:column headerText="Pago" colspan="2">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Pago"/>
+                            </f:facet>
                             <h:outputText value="#{pla.hisPago}"/>
                         </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText="TOTAL A PAGAR" colspan="3"/>
+                                <p:column footerText="#{planillaManejador.planilla.plaTotalSalario}" colspan="1"/>
+                                <p:column footerText="#{planillaManejador.planilla.plaTotalDescuento}" colspan="3" style="text-align: center;"/>
+                                <p:column footerText="#{planillaManejador.planilla.plaTotalPago}" colspan="1"/>
+                            </p:row>
+                        </p:columnGroup>
+                        
 
-                    </p:dataTable>
-                    <p:dataTable var="pla" value="1" styleClass="tabla-personal">
-                        <p:column colspan="3">
-                            <h:outputText value="TOTAL PAGADO"/>
-                        </p:column>
-                        <p:column colspan="1">
-                            <h:outputText value="#{planillaManejador.planilla.plaTotalSalario}"/>
-                        </p:column>
-                        <p:column colspan="4" style="text-align: center;">
-                            <h:outputText value="#{planillaManejador.planilla.plaTotalDescuento}"/>
-                        </p:column>
-                        <p:column colspan="1">
-                            <h:outputText value="#{planillaManejador.planilla.plaTotalPago}"/>
-                        </p:column>
-
-                    </p:dataTable>
+                    </p:dataTable> 
+                    </h:form>
+                        
+                </h:panelGroup>
                         </div>
-                </p:dialog>
                 
             </ui:define>
         </ui:composition>

@@ -14,7 +14,7 @@
                     <h1 style="display: inline">PLANILLA DE PAGOS, FECHA:<p:outputLabel value="#{historialManejador.claseEntidad.plaId.plaFecha}"></p:outputLabel></h1>
                 
                 
-                    <p:dataTable var="pla" value="#{historialManejador.elementos}" id="table" draggableColumns="true" reflow="true">
+                    <p:dataTable var="pla" value="#{historialManejador.empleados}" id="table" draggableColumns="true" reflow="true">
                     <p:column headerText="Id Empleado" colspan="1">
                         <h:outputText value="#{pla.hisIdEmpleado}"/>
                     </p:column>

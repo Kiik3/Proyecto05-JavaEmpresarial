@@ -9,15 +9,78 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <f:event listener="#{incioSesionManejador.validarSesion()}" type="preRenderView"/>
         <ui:composition template="plantilla.xhtml">
+            <ui:define name="validacion">
+                <f:event listener="#{incioSesionManejador.validarSesion()}" type="preRenderView"/>
+                <f:event listener="#{incioSesionManejador.validarAdmin()}" type="preRenderView"/>
+            </ui:define>
+            <ui:define name="index">
+                <a class="dropdown-item" href="administrador.xhtml">
+                    Menú
+                </a>
+            </ui:define>
+            <ui:define name="dashboard">
+                <a class="nav-link" href="administrador.xhtml">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dashboard
+                </a>
+            </ui:define>
             <ui:define name="contenido">
-                <h1>BIENVENIDO ADMINISTRADOR</h1>
-
-                <h:form> 
-                    <p:growl id="growl" life="2000" />
-                    <p:commandButton value="Cerrar sesión" action="#{incioSesionManejador.cerrarSesion()}" style="margin-right:20px;"/>   
-                </h:form>
+                <div class="m-2">
+                <h1>MENÚ ADMINISTRADOR</h1>
+                <div class="row" style="text-align: center">
+                    <div class="col">
+                        <a href="rol.xhtml">
+                            <img src="../img/logoRol.png" width="150" height="150"/>
+                        </a>
+                        <h5>Gestión de Roles</h5>
+                    </div>
+                    <div class="col">
+                        <a href="usuarios.xhtml">
+                            <img src="../img/logoUsuario.jpg" width="150" height="150"/>
+                        </a>
+                        <h5>Gestión de Usuarios</h5>
+                    </div>
+                    <div class="col">
+                        <a href="departamentos.xhtml">
+                            <img src="../img/logoDepartamento.png" width="150" height="150" style="border-radius: 70px;"/>
+                        </a>
+                        <h5>Gestión de Departamentos</h5>
+                    </div>
+                    <div class="col">
+                        <a href="puestos.xhtml">
+                            <img src="../img/logoPuesto.png" width="150" height="150"/>
+                        </a>
+                        <h5>Gestión de Puestos</h5>
+                    </div>
+                </div>
+                <div class="row mt-5" style="text-align: center;">
+                    <div class="col">
+                        <a href="estados.xhtml">
+                            <img src="../img/logoEstado.png" width="150" height="150"/>
+                        </a>
+                        <h5>Gestión de Estados de Empleado</h5>
+                    </div>
+                    <div class="col">
+                        <a href="descuentos.xhtml">
+                            <img src="../img/logoDescuento.png" width="150" height="150"/>
+                        </a>
+                        <h5>Gestión de Descuentos de Ley</h5>
+                    </div>
+                    <div class="col">
+                        <a href="renta.xhtml">
+                            <img src="../img/logoRenta.png" height="150" />
+                        </a>
+                        <h5>Gestión de Tramos de Renta</h5>
+                    </div>
+                    <div class="col">
+                        <a href="puestos.xhtml">
+                            <img src="../img/logoPuesto.png" width="150" height="150"/>
+                        </a>
+                        <h5>Gestión de Usuarios</h5>
+                    </div>
+                </div>
+                </div>
             </ui:define>
             <ui:define name="menu">
                 <a class="nav-link" href="rol.xhtml">Gestión de Roles</a>
@@ -28,6 +91,10 @@
                 <a class="nav-link" href="descuentos.xhtml">Descuentos de Ley</a>
                 <a class="nav-link" href="renta.xhtml">Tramos de Renta</a>
                 <a class="nav-link" href="usuarios.xhtml">Fecha de pago de Planilla</a>
+            </ui:define>
+            <ui:define name="usuario">
+                <div class="small">Administrador:</div>
+                <h:outputText value="#{incioSesionManejador.usuario.usuNombre}"/>
             </ui:define>
         </ui:composition>
     </h:body>

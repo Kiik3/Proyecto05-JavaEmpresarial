@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="usuario.xhtml">
+            <ui:define name="contenido">
+                <div style="margin: 20px;">
+                    <h1 style="display: inline">EMPLEADO <h:outputText value="#{historialManejador.claseEntidad.hisNombreEmpleado}" /></h1>
+                <h:form style="display: inline">
+                    <p:commandButton actionListener="#{empleadoManejador.nuevaEntidad()}" value="Regresar" oncomplete="PF('modalForm').show();" style="float: right" />
+                </h:form>
+                
+                    <p:dataTable var="emp" value="#{historialManejador.pagosEmpleado}" id="table" draggableColumns="true" reflow="true" paginator="true" rows="10">
+                    <p:column headerText="Id" colspan="1">
+                        <h:outputText value="#{emp.hisIdEmpleado}"/>
+                    </p:column>
+                    <p:column headerText="ISSS" colspan="1">
+                        <h:outputText value="#{emp.hisIsss}"/>
+                    </p:column>
+                    <p:column headerText="AFP" colspan="1">
+                        <h:outputText value="#{emp.hisAfp}"/>
+                    </p:column>
+                    <p:column headerText="Renta" colspan="1">
+                        <h:outputText value="#{emp.hisRenta}"/>
+                    </p:column>
+                    <p:column headerText="Total Pago" colspan="1">
+                        <h:outputText value="#{emp.hisPago}"/>
+                    </p:column>
+                    <p:column headerText="Fecha de Pago" colspan="1">
+                        <h:outputText value="#{emp.plaId.plaFecha}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+                    </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

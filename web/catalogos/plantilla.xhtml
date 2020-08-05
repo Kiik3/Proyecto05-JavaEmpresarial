@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -16,6 +17,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
     </h:head>
     <h:body class="sb-nav-fixed">
+        <ui:insert name="validacion">
+            hola
+        </ui:insert>
         
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="index.html">Sist Administrativo</a>
@@ -34,10 +38,15 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <ui:insert name="index">
+                            <a class="dropdown-item" href="#">
+                                Menú
+                            </a>
+                        </ui:insert>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <h:form>
+                            <p:commandLink class="dropdown-item" value="Cerrar Sesión" action="#{incioSesionManejador.cerrarSesion()}"/>
+                        </h:form>
                     </div>
                 </li>
             </ul>
@@ -48,10 +57,12 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Menú</div>
-                            <a class="nav-link" href="index.html">
+                            <ui:insert name="dashboard">
+                            <a class="nav-link" href="administrador.xhtml">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+                            </ui:insert>
                             <div class="sb-sidenav-menu-heading">Acciones</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -94,21 +105,15 @@
                                     </div>
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
-                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Usuario:</div>
-                        Start Bootstrap
+                        <ui:insert name="usuario">
+                            <div class="small">Usuario:</div>
+                            Start Bootstrap
+                        </ui:insert>
                     </div>
+                        
                 </nav>
             </div>
             <div id="layoutSidenav_content">
@@ -119,12 +124,8 @@
                     <div class="container-fluid">
                         
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                            <div class="text-muted">Sistema Administrativo</div>
+                            <div class="text-muted">Proyecto05</div>
                         </div>
                     </div>
                 </footer>
