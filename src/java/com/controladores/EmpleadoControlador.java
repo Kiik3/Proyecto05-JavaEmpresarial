@@ -38,6 +38,39 @@ public class EmpleadoControlador extends AbstractoControlador<AdmEmpEmpleado>{
     }
     
     @Override
+    public void insertarEntidad(){
+        em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query q = em.createNativeQuery("INSERT INTO ADM_EMP_EMPLEADO"
+                    + "(EMP_FECHA_CONTRATACION, PUE_ID, EMP_IDENTIFICACION, EMP_SALARIO, EMP_APELLIDO, EMP_FECHA_NACIMIENTO, EMP_NOMBRE, EMP_CORREO,"
+                    + " DEP_ID, EST_ID, EMP_TELEFONO) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)");
+            
+            q.setParameter(1, ClaseEntidad.getEmpFechaContratacion());
+            q.setParameter(2, ClaseEntidad.getPueId().getAdmPuePuestoTrabajoPK().getPueId());
+            q.setParameter(3, ClaseEntidad.getEmpIdentificacion());
+            q.setParameter(4, ClaseEntidad.getEmpSalario());
+            q.setParameter(5, ClaseEntidad.getEmpApellido());
+            q.setParameter(6, ClaseEntidad.getEmpFechaNacimiento());
+            q.setParameter(7, ClaseEntidad.getEmpNombre());
+            q.setParameter(8, ClaseEntidad.getEmpCorreo());
+            q.setParameter(9, ClaseEntidad.getPueId().getAdmPuePuestoTrabajoPK().getDepId());
+            q.setParameter(10, ClaseEntidad.getEstId().getEstId());            
+            q.setParameter(11, ClaseEntidad.getEmpTelefono());
+
+            q.executeUpdate();
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        }
+        finally{
+            em.close();
+        }
+    }
+    
+    @Override
     public EntityManager getEntityManager() {
         return ConexionBD.getInstance().getEntityManagerFactory().createEntityManager();
     }

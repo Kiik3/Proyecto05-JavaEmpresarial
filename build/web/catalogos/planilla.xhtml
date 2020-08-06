@@ -13,7 +13,7 @@
                 <div style="margin: 20px;">
                     <h1 style="display: inline">PLANILLA DE PAGOS</h1>
                 <h:form style="display: inline">
-                    <p:growl id="growl" life="2000" />
+                    <p:growl id="growl" life="5000" />
                     <p:commandButton action="#{planillaManejador.pagar()}" id="pagar" update="growl, table" value="Pagar planilla" style="float: right">
                         <p:confirm header="Confirmación" message="Está seguro?" icon="pi pi-exclamation-triangle" />
                     </p:commandButton>

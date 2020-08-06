@@ -53,17 +53,24 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     
     @Override
     public void insertar(){
+        claseEntidad.getEstId().setEstId(1);
         int i = claseEntidad.getPueId().getAdmPuePuestoTrabajoPK().getPueId();
         AdmPuePuestoTrabajo puesto = (AdmPuePuestoTrabajo) claseEntidadControlador.encontrarPorId(i);
-
+        
         if(claseEntidad.getEmpSalario() < puesto.getPueSalarioMinimo() || claseEntidad.getEmpSalario() > puesto.getPueSalarioMaximo()){
             Utilidades.mensajeError("El salario según el puesto escogido no debe ser menor a " + puesto.getPueSalarioMinimo() + ", ni mayor a " + puesto.getPueSalarioMaximo());
         }
         else{
-            claseEntidadControlador.actualizarEntidad(claseEntidad);
-            Utilidades.mensajeExito("Realizado correctamente");
-            inicializar();
-            
+            if(claseEntidad.getEmpIdJefe().getEmpId() == null){
+                claseEntidadControlador.insertarEntidad();
+                Utilidades.mensajeExito("Realizado correctamente");
+                inicializar();
+            }
+            else{
+                claseEntidadControlador.actualizarEntidad(claseEntidad);
+                Utilidades.mensajeExito("Realizado correctamente");
+                inicializar();
+            }
         }
    
     }

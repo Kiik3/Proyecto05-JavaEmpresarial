@@ -8,6 +8,7 @@ import com.entidades.AdmEmpEmpleado;
 import com.entidades.AdmHisHistorialPago;
 import com.entidades.AdmPlaPlanilla;
 import com.entidades.AdmRenRenta;
+import com.propiedades.Propiedades;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,9 @@ public class PlanillaManejador {
     private AdmHisHistorialPago historial;
     private HistorialControlador historialControlador;
     
+    @ManagedProperty(value = "#{incioSesionManejador}")
+    private IncioSesionManejador sesion;
+    
     @ManagedProperty(value = "#{descuentoManejador}")
     private DescuentoManejador descuento;
     
@@ -44,6 +48,7 @@ public class PlanillaManejador {
     private List<AdmPlaPlanilla> planillas = new ArrayList<AdmPlaPlanilla>();
     private List<AdmHisHistorialPago> elementos;
     private boolean flagVerDetalles;
+    Propiedades propiedades = new Propiedades();
     
     @PostConstruct
     public void inicializar(){
@@ -60,23 +65,33 @@ public class PlanillaManejador {
         
         historial = new AdmHisHistorialPago();
         flagVerDetalles = false;
-        
 
     }
     
     public void pagar(){
-        planillaControlador.insertarEntidad();
-        System.out.println(planilla.getPlaId());
-        System.out.println(elementos);
-        for(AdmHisHistorialPago h:elementos){
-            System.out.println(h.getHisIdEmpleado());
-            h.setPlaId(planilla);
-            historialControlador = new HistorialControlador(h);
-            historialControlador.getEntityManager();
-            historialControlador.insertarEntidad();
+        byte fechaPago = Byte.parseByte(propiedades.cargarFechaPla().getProperty("fecha"));
+        boolean pagar = Boolean.valueOf(propiedades.cargarPagarPla().getProperty("pagar"));
+        if(!pagar){
+            Utilidades.mensajeError("No, se pudo pagar, fecha de pago: " + fechaPago + " de cada mes");
         }
-        Utilidades.mensajeExito("Planilla pagada correctamente");
-        inicializar();
+        else{
+            planillaControlador.insertarEntidad();
+            System.out.println(planilla.getPlaId());
+            System.out.println(elementos);
+            for(AdmHisHistorialPago h:elementos){
+                System.out.println(h.getHisIdEmpleado());
+                h.setPlaId(planilla);
+                historialControlador = new HistorialControlador(h);
+                historialControlador.getEntityManager();
+                historialControlador.insertarEntidad();
+            }
+            Utilidades.mensajeExito("Planilla pagada correctamente");
+            inicializar();
+
+            propiedades.insertarPagar("pagar", "false");
+            sesion.avisoPagoPlanilla();
+        }
+
     }
     
     public void verDetalles(int id) throws IOException{
@@ -141,6 +156,14 @@ public class PlanillaManejador {
 
     public void setFlagVerDetalles(boolean flagVerDetalles) {
         this.flagVerDetalles = flagVerDetalles;
+    }
+
+    public IncioSesionManejador getSesion() {
+        return sesion;
+    }
+
+    public void setSesion(IncioSesionManejador sesion) {
+        this.sesion = sesion;
     }
     
 }

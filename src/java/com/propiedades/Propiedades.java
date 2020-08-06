@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 public class Propiedades {
     
     private static String CONFIGURACION = "configuracion.properties";
-    private static String RUTA = "pagarplanilla.properties";
-    private static String RUTAPLA = "fechaplanilla.properties";
+    private static String RUTA = "C:\\Users\\kik3o\\OneDrive\\Documentos\\NetBeansProjects\\Proyectos-CursoJavaEmpresarial\\pagarplanilla.properties";
+    private static String RUTAPLA = "C:\\Users\\kik3o\\OneDrive\\Documentos\\NetBeansProjects\\Proyectos-CursoJavaEmpresarial\\fechaplanilla.properties";
     
     public InputStream getResourcesInputAsStream(String configuracion){
         return Propiedades.class.getResourceAsStream(configuracion);
@@ -37,6 +37,20 @@ public class Propiedades {
         
         return propiedades;
     }
+    
+    public void insertarPagar(String key, String value){
+        Properties propiedades = new Properties();
+        OutputStream out;
+        try {
+            out = new FileOutputStream(RUTA);
+            propiedades.setProperty(key, value);
+            propiedades.store(out, "");
+            System.out.println("Se mete a propiedades");
+        } catch (IOException ex) {
+            Logger.getLogger(Propiedades.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     //Cargar fecha de pago de planilla
     public Properties cargarFechaPla(){
         

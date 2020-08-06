@@ -11,8 +11,7 @@
     <h:body>
         <ui:composition template="plantilla.xhtml">
             <ui:define name="validacion">
-                <f:event listener="#{incioSesionManejador.validarSesion()}" type="preRenderView"/>
-                <f:event listener="#{incioSesionManejador.validarUsuario()}" type="preRenderView"/>
+                
             </ui:define>
             <ui:define name="index">
                 <a class="dropdown-item" href="usuario.xhtml">
@@ -27,7 +26,17 @@
             </ui:define>
             <ui:define name="contenido">
                 <div class="m-4">
-                <h1>MENÚ USUARIO RRHH</h1>
+                     <h:form style="display: inline">
+                         <p:commandButton update="mesa" actionListener="#{incioSesionManejador.pagar()}" value="Prueba" style="float: right" />
+                    </h:form>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-6">
+                        <h1>MENÚ USUARIO RRHH</h1>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p:staticMessage id="mesa" rendered="#{incioSesionManejador.aviso}" severity="warn" summary="AVISO!" detail="Hoy se paga planilla. Aún no se ha efectuado el pago!" />
+                    </div>
+                </div>
                 <div class="row" style="text-align: center">
                     <div class="col">
                         <a href="empleados.xhtml">

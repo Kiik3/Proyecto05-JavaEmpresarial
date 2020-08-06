@@ -5,7 +5,9 @@ import com.controladores.UsuarioControlador;
 import com.correo.CorreoElectronico;
 import com.entidades.AdmUsuUsuario;
 import com.propiedades.Encriptador;
+import com.propiedades.Propiedades;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -33,7 +35,11 @@ public class IncioSesionManejador {
     private int codigoAutenticacion;
     private int numero;
     private boolean flagAutenticacion;
+    private boolean aviso;
     Encriptador enc = new Encriptador();
+    Propiedades propiedades = new Propiedades();
+    GregorianCalendar gc = new GregorianCalendar();
+    private String fechaPago;
     
     @PostConstruct
     public void inicializar(){
@@ -41,6 +47,7 @@ public class IncioSesionManejador {
         usuarioEncontrado = new AdmUsuUsuario();
         usuarioControlador = new UsuarioControlador(usuario);
         flagAutenticacion = false;
+        aviso = false;
         numero = 1;
         codigoAutenticacion = 0;
     }
@@ -75,12 +82,24 @@ public class IncioSesionManejador {
     }
     
     public void validarCodigo() throws IOException{
+
+        byte fechaHoy = (byte) gc.get(GregorianCalendar.DAY_OF_MONTH); //Se obtiene la fecha de hoy
+        fechaPago = propiedades.cargarFechaPla().getProperty("fecha");
+        
+         //El día anterior al pago de planilla, se activa el pago
+        if(fechaHoy == Byte.parseByte(fechaPago)-3){
+            propiedades.insertarPagar("pagar", "true");
+        }
+        
+        //Se valida que el código introducido sea el mismo al que se envió al correo
         if(numero == codigoAutenticacion){
             Utilidades.mensajeExito("Credenciales correctas");
             if(usuarioEncontrado.getRolId().getRolId() == 1){
+                avisoPagoPlanilla();
                 Utilidades.redireccion("catalogos/administrador");
             }
             else if(usuarioEncontrado.getRolId().getRolId() == 3){
+                avisoPagoPlanilla();
                 Utilidades.redireccion("catalogos/usuario");
             }
             flagAutenticacion = false;
@@ -88,8 +107,6 @@ public class IncioSesionManejador {
         else{
             Utilidades.mensajeError("Código incorrecto");
         }
-//        codigoAutenticacion = 0;
-//        numero = 0;
     }
     
     public void validarSesion() throws IOException{
@@ -126,12 +143,36 @@ public class IncioSesionManejador {
             Utilidades.redireccion("confirmacion");
         }
         else{
-            System.out.println("no funciona q putas");
+            System.out.println("no funciona");
         }
     }
-//    public void destruir(){
-//        usuario = null;
-//    }
+    
+    public void cambiarFecha(String fecha){
+        
+        if(Byte.parseByte(fecha) <= 0 || Byte.parseByte(fecha) >= 31){
+            Utilidades.mensajeError("Fecha incorrecta, debe ser entre 1 y 30");
+        }
+        else{
+            propiedades.insertarPla("fecha", fecha);
+            propiedades.insertarPagar("pagar", "true");
+            Utilidades.mensajeExito("Fecha de pago actualizada correctamente");
+        }
+    }
+    
+    public void avisoPagoPlanilla(){
+        byte fechaHoy = (byte) gc.get(GregorianCalendar.DAY_OF_MONTH); //Se obtiene la fecha de hoy
+
+        fechaPago = propiedades.cargarFechaPla().getProperty("fecha");
+        boolean pagar = Boolean.valueOf(propiedades.cargarPagarPla().getProperty("pagar"));
+
+        if(fechaHoy == Byte.parseByte(fechaPago) && pagar){
+            System.out.println("Se mete a aviso");
+            aviso = true;
+        }
+        else{
+            aviso = false;
+        }
+    }
 
     public AdmUsuUsuario getUsuario() {
         return usuario;
@@ -163,6 +204,22 @@ public class IncioSesionManejador {
 
     public void setFlagAutenticacion(boolean flagAutenticacion) {
         this.flagAutenticacion = flagAutenticacion;
+    }
+
+    public boolean isAviso() {
+        return aviso;
+    }
+
+    public void setAviso(boolean aviso) {
+        this.aviso = aviso;
+    }
+
+    public String getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(String fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
 }
