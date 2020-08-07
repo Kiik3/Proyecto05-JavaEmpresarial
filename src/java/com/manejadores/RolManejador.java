@@ -18,8 +18,6 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class RolManejador extends AbastractoManejador<AdmRolRol>{
     
-//    private AdmRolRol rol;
-//    private RolControlador rolControlador;
     private List<AdmRolRol> roles = new ArrayList<AdmRolRol>();
     
     @PostConstruct
@@ -29,10 +27,7 @@ public class RolManejador extends AbastractoManejador<AdmRolRol>{
         claseEntidadControlador = new RolControlador(claseEntidad);
         claseEntidadControlador.getEntityManager();
         roles = claseEntidadControlador.encontrarEntidades();
-//        rol = new AdmRolRol();
-//        rolControlador = new RolControlador(rol);
-//        rolControlador.getEntityManager();
-//        roles = rolControlador.encontrarEntidades();
+
     }
     
     @Override
@@ -42,22 +37,6 @@ public class RolManejador extends AbastractoManejador<AdmRolRol>{
         claseEntidadControlador.getEntityManager();
     }
 
-//    public AdmRolRol getRol() {
-//        return rol;
-//    }
-//
-//    public void setRol(AdmRolRol rol) {
-//        this.rol = rol;
-//    }
-//
-//    public RolControlador getRolControlador() {
-//        return rolControlador;
-//    }
-//
-//    public void setRolControlador(RolControlador rolControlador) {
-//        this.rolControlador = rolControlador;
-//    }
-//
     public List<AdmRolRol> getRoles() {
         return roles;
     }

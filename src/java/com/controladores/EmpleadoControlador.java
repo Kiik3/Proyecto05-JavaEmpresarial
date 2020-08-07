@@ -2,10 +2,8 @@
 package com.controladores;
 
 import com.conexionBD.ConexionBD;
-import com.entidades.AdmDepDepartamento;
 import com.entidades.AdmEmpEmpleado;
 import com.entidades.AdmPuePuestoTrabajo;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -16,10 +14,12 @@ import javax.persistence.Query;
  */
 public class EmpleadoControlador extends AbstractoControlador<AdmEmpEmpleado>{
     
+    //En el constructor se define la entidad
     public EmpleadoControlador(AdmEmpEmpleado empleado){
         super.ClaseEntidad = empleado;
     }
     
+    //Se seleccionan aquellos empleados que son jefes
     @Override
     public List<AdmEmpEmpleado> encontrarJefes(){
         em = getEntityManager();
@@ -37,6 +37,8 @@ public class EmpleadoControlador extends AbstractoControlador<AdmEmpEmpleado>{
         }
     }
     
+    //Se sobre escribe el metodo insertar, para cuando el empleado a ingresar sea jefe (jefe=null)
+    //Se utiliza un NativeQuery
     @Override
     public void insertarEntidad(){
         em = getEntityManager();
@@ -74,7 +76,8 @@ public class EmpleadoControlador extends AbstractoControlador<AdmEmpEmpleado>{
     public EntityManager getEntityManager() {
         return ConexionBD.getInstance().getEntityManagerFactory().createEntityManager();
     }
-
+    
+    //Se encuentra el puesto de trabajo 
     @Override
     public Object encontrarPorId(int id) {
         em = getEntityManager();

@@ -20,7 +20,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kik3o
+ * @author Enrique Ochoa
  */
 @Entity
 @Table(name = "ADM_PUE_PUESTO_TRABAJO", catalog = "PROYECTO04_ADMINISTRACION_EMPLEADOS", schema = "")

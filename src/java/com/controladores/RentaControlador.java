@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
  */
 public class RentaControlador extends AbstractoControlador<AdmRenRenta>{
     
+    //En el constructor se define la entidad
     public RentaControlador(AdmRenRenta renta){
         super.ClaseEntidad = renta;
     }

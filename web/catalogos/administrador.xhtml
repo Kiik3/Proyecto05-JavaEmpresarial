@@ -14,6 +14,9 @@
                 <f:event listener="#{incioSesionManejador.validarSesion()}" type="preRenderView"/>
                 <f:event listener="#{incioSesionManejador.validarAdmin()}" type="preRenderView"/>
             </ui:define>
+            <ui:define name="usuario-nav">
+                <div style="font-size: x-large; color: white;">Administrador: <h:outputText value="#{incioSesionManejador.usuario.usuNombre}"/></div>
+            </ui:define>
             <ui:define name="index">
                 <a class="dropdown-item" href="administrador.xhtml">
                     Menú

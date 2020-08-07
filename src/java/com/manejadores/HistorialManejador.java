@@ -21,12 +21,13 @@ import utilidades.Utilidades;
 @ViewScoped
 public class HistorialManejador extends AbastractoManejador<AdmHisHistorialPago>{
     
+    //Inyección del manejador de Planilla
     @ManagedProperty(value = "#{planillaManejador}")
     private PlanillaManejador planilla;
     
     private List<AdmHisHistorialPago> empleados = new ArrayList<AdmHisHistorialPago>();
     private List<AdmHisHistorialPago> pagosEmpleado = new ArrayList<AdmHisHistorialPago>();
-    private boolean detallePago = false;
+    private boolean detallePago = false; //Bandera para mostrar la lista de empleados o los detalles de pago de cada empleado
     
     @PostConstruct
     @Override
@@ -37,6 +38,7 @@ public class HistorialManejador extends AbastractoManejador<AdmHisHistorialPago>
         empleados = claseEntidadControlador.encontrarEntidades();
     }
     
+    //Se listan los detalles de pago de un empleado
     public void historialEmpleado(AdmHisHistorialPago emp) throws IOException{
         pagosEmpleado = claseEntidadControlador.encontrarPuestos(emp.getHisIdEmpleado());
         detallePago = true;

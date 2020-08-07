@@ -8,14 +8,9 @@ import com.propiedades.Encriptador;
 import com.propiedades.Propiedades;
 import java.io.IOException;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 import utilidades.Utilidades;
 
@@ -52,31 +47,33 @@ public class IncioSesionManejador {
         codigoAutenticacion = 0;
     }
     
+    //Validación de usuario
     public void validacion() throws IOException{
         usuarioControlador = new UsuarioControlador(usuario);
         usuarioControlador.getEntityManager();
         usuarioEncontrado = usuarioControlador.validarUsuario(usuario);
-
+        
+        //Se niega el ingreso si el usuario o contraseña son inválidas
         if(usuarioEncontrado == null || !enc.desencriptador(usuarioEncontrado.getUsuContrasena()).equals(usuario.getUsuContrasena())){
             Utilidades.mensajeError("Credenciales incorrectas");
             inicializar();
         }
         else{
             mandarCorreo();
-            flagAutenticacion = true;
+            
         }
         
     }
-    
+    //Se envía un email para autenticación
     public void mandarCorreo(){
         numero = (int) (Math.random()*(999999-100000+1)+100000);
             try {
                 correoElectronico.mandarCorreo(usuario.getUsuCorreo(), usuarioEncontrado.getRolId().getRolId(), numero);
                 System.out.println("se mando");
+                flagAutenticacion = true;
             } catch (EmailException ex) {
-                Utilidades.mensajeError("Correo electrónico inválido");
-                usuario.setUsuNombre(null);
-                usuario.setUsuCorreo(null);
+                Utilidades.mensajeError("Correo electrónico inválido" + ex.getLocalizedMessage());
+                inicializar();
                 System.out.println("no se mando");
             }
     }
@@ -86,7 +83,7 @@ public class IncioSesionManejador {
         byte fechaHoy = (byte) gc.get(GregorianCalendar.DAY_OF_MONTH); //Se obtiene la fecha de hoy
         fechaPago = propiedades.cargarFechaPla().getProperty("fecha");
         
-         //El día anterior al pago de planilla, se activa el pago
+         //Tres días anteriores al pago de planilla, se activa el pago
         if(fechaHoy == Byte.parseByte(fechaPago)-3){
             propiedades.insertarPagar("pagar", "true");
         }
@@ -108,15 +105,15 @@ public class IncioSesionManejador {
             Utilidades.mensajeError("Código incorrecto");
         }
     }
-    
+    //Valida la sesión del usuario, negando el acceso al sistema si aun no ha iniciado sesión
     public void validarSesion() throws IOException{
         System.out.println(usuario.getUsuNombre());
-        if(usuarioEncontrado.getRolId()== null && numero != codigoAutenticacion){
+        if(usuarioEncontrado.getRolId()== null || numero != codigoAutenticacion){
             inicializar();
             Utilidades.redireccion("index");
         }
     }
-    
+    //Valida si es administrador para no tener acceso a las vistas de usuario rrhh
     public void validarAdmin() throws IOException{
         validarSesion();
         
@@ -124,19 +121,19 @@ public class IncioSesionManejador {
             Utilidades.redireccion("catalogos/usuario");
         }
     }
-    
+    //Valida si es usuario rrhh para no tener acceso a las vistas del administrador
     public void validarUsuario() throws IOException{
         validarSesion();
         if(usuarioEncontrado.getRolId().getRolId() != 3){
             Utilidades.redireccion("catalogos/administrador");
         }
     }
-    
+    //Cierra la sesión actual
     public void cerrarSesion() throws IOException{
         inicializar();
         Utilidades.redireccion("index");
     }
-    
+    //Confirma sesión
     public void confirmarSesion() throws IOException{
         if(usuarioEncontrado.getUsuNombre() != null){
             System.out.println("funciona");
@@ -146,7 +143,7 @@ public class IncioSesionManejador {
             System.out.println("no funciona");
         }
     }
-    
+    //Permite al administrador modificar el día de pago de planilla
     public void cambiarFecha(String fecha){
         
         if(Byte.parseByte(fecha) <= 0 || Byte.parseByte(fecha) >= 31){
@@ -158,7 +155,7 @@ public class IncioSesionManejador {
             Utilidades.mensajeExito("Fecha de pago actualizada correctamente");
         }
     }
-    
+    //Aviso que se muestta si el día actual es pago de planilla
     public void avisoPagoPlanilla(){
         byte fechaHoy = (byte) gc.get(GregorianCalendar.DAY_OF_MONTH); //Se obtiene la fecha de hoy
 

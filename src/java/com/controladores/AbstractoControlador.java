@@ -18,6 +18,7 @@ public abstract class AbstractoControlador<T> {
     protected T ClaseEntidad;
     protected List<T> ListaEntidad;
     
+    //Selecciona las entidades existentes
     public List<T> encontrarEntidades() {
         return encontrarEntidades(true, -1, -1);
     }
@@ -42,6 +43,7 @@ public abstract class AbstractoControlador<T> {
         }
     }
     
+    //Ingresa un nuevo registro a la BD
     public void insertarEntidad(){
         em = getEntityManager();
         try {
@@ -56,6 +58,7 @@ public abstract class AbstractoControlador<T> {
         }
     }
     
+    //Actualiza un registro o lo inserta si este no existe
     public void actualizarEntidad(T entidad){
         em = getEntityManager();
         try {
@@ -69,6 +72,7 @@ public abstract class AbstractoControlador<T> {
         }
     }
     
+    //Elimina el registro
     public void eliminarEntidad(T entidad){
         em = getEntityManager();
         try {
@@ -94,8 +98,10 @@ public abstract class AbstractoControlador<T> {
         return ListaEntidad;
     }
     
+    //Método abstracto para obtener el Manejador de Entidades de la BD
     public abstract EntityManager getEntityManager();
     
+    //Método abstracto para encontrar un solo elemento por su id
     public abstract Object encontrarPorId(int id);
  
     

@@ -3,11 +3,8 @@ package com.manejadores;
 
 import com.controladores.HistorialControlador;
 import com.controladores.PlanillaControlador;
-import com.entidades.AdmDesDescuentoLey;
-import com.entidades.AdmEmpEmpleado;
 import com.entidades.AdmHisHistorialPago;
 import com.entidades.AdmPlaPlanilla;
-import com.entidades.AdmRenRenta;
 import com.propiedades.Propiedades;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,8 +13,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import utilidades.Utilidades;
 
@@ -36,6 +31,7 @@ public class PlanillaManejador {
     private AdmHisHistorialPago historial;
     private HistorialControlador historialControlador;
     
+    //Inyecciones de manejadores
     @ManagedProperty(value = "#{incioSesionManejador}")
     private IncioSesionManejador sesion;
     
@@ -47,7 +43,7 @@ public class PlanillaManejador {
     
     private List<AdmPlaPlanilla> planillas = new ArrayList<AdmPlaPlanilla>();
     private List<AdmHisHistorialPago> elementos;
-    private boolean flagVerDetalles;
+    private boolean flagVerDetalles; //bandera que determina si se muestra el listado de planillas o el detalle de pago
     Propiedades propiedades = new Propiedades();
     
     @PostConstruct
@@ -56,6 +52,8 @@ public class PlanillaManejador {
         elementos = new ArrayList<AdmHisHistorialPago>();
         planillaControlador = new PlanillaControlador(planilla);
         planillaControlador.getEntityManager();
+        
+        //Se obtienen todos los pagos de cada empleado en planilla
         elementos = planillaControlador.calcularPlanilla(descuento.getDescuentos(), renta.getRentas());
         planilla.setPlaFecha(new Date());
         planilla.setPlaTotalSalario(planillaControlador.totalSalario);
@@ -67,10 +65,11 @@ public class PlanillaManejador {
         flagVerDetalles = false;
 
     }
-    
+    //Pago de planilla
     public void pagar(){
         byte fechaPago = Byte.parseByte(propiedades.cargarFechaPla().getProperty("fecha"));
         boolean pagar = Boolean.valueOf(propiedades.cargarPagarPla().getProperty("pagar"));
+        //Se valida que se día de pago
         if(!pagar){
             Utilidades.mensajeError("No, se pudo pagar, fecha de pago: " + fechaPago + " de cada mes");
         }
@@ -93,7 +92,7 @@ public class PlanillaManejador {
         }
 
     }
-    
+    //Permite ver los detalles de la planilla seleccionada
     public void verDetalles(int id) throws IOException{
         elementos = planillaControlador.verDetallesPlanilla(id);
         System.out.println(id);

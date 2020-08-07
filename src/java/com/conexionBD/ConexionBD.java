@@ -13,6 +13,7 @@ public class ConexionBD {
     static ConexionBD con = new ConexionBD();
     static EntityManagerFactory emf;
     
+    //Singleton para establecer conexión con la BD
     private ConexionBD(){
         emf = Persistence.createEntityManagerFactory("Proyecto05PU");
     }

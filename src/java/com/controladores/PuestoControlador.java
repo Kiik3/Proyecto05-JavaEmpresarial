@@ -14,10 +14,12 @@ import javax.persistence.Query;
  */
 public class PuestoControlador extends AbstractoControlador<AdmPuePuestoTrabajo>{
     
+    //En el constructor se define la entidad
     public PuestoControlador(AdmPuePuestoTrabajo puesto){
         super.ClaseEntidad = puesto;
     }
     
+    //Se encuentra un departamento por su id
     @Override
     public AdmDepDepartamento encontrarPorId(int id){
         em = getEntityManager();
@@ -37,6 +39,7 @@ public class PuestoControlador extends AbstractoControlador<AdmPuePuestoTrabajo>
         }
     }
     
+    //Se seleccionan los puestos que pertenezcan a cierto departamento
     @Override
     public List<AdmPuePuestoTrabajo> encontrarPuestos(int id){
         em = getEntityManager();

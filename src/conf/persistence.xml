@@ -12,7 +12,6 @@
     <class>com.entidades.AdmDesDescuentoLey</class>
     <class>com.entidades.AdmPuePuestoTrabajo</class>
     <class>com.entidades.AdmDepDepartamento</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://35.238.134.0:3306/PROYECTO04_ADMINISTRACION_EMPLEADOS?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="java"/>

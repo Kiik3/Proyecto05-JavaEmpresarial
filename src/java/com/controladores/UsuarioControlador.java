@@ -13,10 +13,12 @@ import javax.persistence.Query;
  */
 public class UsuarioControlador extends AbstractoControlador<AdmUsuUsuario>{
     
+    //En el constructor se define la entidad
     public UsuarioControlador(AdmUsuUsuario usuario){
         super.ClaseEntidad = usuario;
     }
     
+    //Se selecciona el usuario según el nombre ingresado en el login
     public AdmUsuUsuario validarUsuario(AdmUsuUsuario usuario){
         AdmUsuUsuario usuarioEncontrado = new AdmUsuUsuario();
         em = getEntityManager();
@@ -36,6 +38,7 @@ public class UsuarioControlador extends AbstractoControlador<AdmUsuUsuario>{
         }
     }
     
+    //Se encuentra el rol por id
     @Override
     public AdmRolRol encontrarPorId(int id){
         em = getEntityManager();

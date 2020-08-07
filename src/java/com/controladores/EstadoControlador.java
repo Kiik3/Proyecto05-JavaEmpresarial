@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
  */
 public class EstadoControlador extends AbstractoControlador<AdmEstEstado>{
     
+    //En el constructor se define la entidad
     public EstadoControlador(AdmEstEstado estado){
         super.ClaseEntidad = estado;
     }

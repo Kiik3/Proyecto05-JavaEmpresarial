@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author kik3o
+ * @author Enrique Ochoa
  */
 @Entity
 @Table(name = "ADM_PLA_PLANILLA", catalog = "PROYECTO04_ADMINISTRACION_EMPLEADOS", schema = "")

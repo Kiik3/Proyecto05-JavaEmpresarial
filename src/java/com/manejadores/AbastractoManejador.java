@@ -17,18 +17,21 @@ public abstract class AbastractoManejador<T> {
     protected AbstractoControlador<T> claseEntidadControlador;
     protected List<T> listaEntidad = new ArrayList<T>();
     
+    //Insertar nueva entidad
     public void insertar(){
         claseEntidadControlador.actualizarEntidad(claseEntidad);
         Utilidades.mensajeExito("Ingresado correctamente");
         inicializar();
     }
     
+    //Actualizar entidad
     public void actualizar(T entidad){
         System.out.println("entra a actualizar" + entidad);
         claseEntidadControlador.actualizarEntidad(entidad);
         Utilidades.mensajeExito("Actualizado correctamente");
     }
     
+    //Eliminar entidad
     public void eliminar(T entidad){
         try {
             System.out.println("entra a eliminar" + entidad);
@@ -65,8 +68,10 @@ public abstract class AbastractoManejador<T> {
         this.claseEntidadControlador = claseEntidadControlador;
     }
     
+    //Método abstracto que se debe implementar con anotacion @PostConstruct
     public abstract void inicializar();
     
+    //Mpetodo abstracto para instanciar una nueva entidad
     public abstract void nuevaEntidad();
     
 }

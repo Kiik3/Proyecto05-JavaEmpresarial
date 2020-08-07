@@ -22,7 +22,7 @@ import utilidades.Utilidades;
 public class UsuarioManejador extends AbastractoManejador<AdmUsuUsuario>{
     
     private List<AdmUsuUsuario> usuarios = new ArrayList<AdmUsuUsuario>();
-    Encriptador enc = new Encriptador();
+    Encriptador enc = new Encriptador(); //Instancia para encriptar la contraseña del usuario
     
     @PostConstruct
     @Override
@@ -39,15 +39,15 @@ public class UsuarioManejador extends AbastractoManejador<AdmUsuUsuario>{
         claseEntidadControlador = new UsuarioControlador(claseEntidad);
         claseEntidadControlador.getEntityManager();
     }
-
+    //Inserción de nuevo usuario
     public void insertar(int id){        
-        claseEntidad.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id));
-        claseEntidad.setUsuContrasena(enc.encriptador(claseEntidad.getUsuContrasena()));
+        claseEntidad.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id)); //Se ingresa al rol que pertenece
+        claseEntidad.setUsuContrasena(enc.encriptador(claseEntidad.getUsuContrasena())); //Se encripta la contraseña
         claseEntidadControlador.insertarEntidad();
         Utilidades.mensajeExito("Ingresado correctamente");
         inicializar();
     }
-    
+    //Actualización de usuario
     public void actualizar(int id, AdmUsuUsuario usuario){        
         usuario.setRolId((AdmRolRol) claseEntidadControlador.encontrarPorId(id));
         usuario.setUsuContrasena(enc.encriptador(usuario.getUsuContrasena()));

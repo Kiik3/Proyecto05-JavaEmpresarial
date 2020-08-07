@@ -42,10 +42,11 @@ public class PuestoManejador extends AbastractoManejador<AdmPuePuestoTrabajo>{
 
     public void insertar(int id){   
         claseEntidad.setAdmDepDepartamento((AdmDepDepartamento) claseEntidadControlador.encontrarPorId(id));
-        int idPuesto = puestos.get(puestos.size()-1).getAdmPuePuestoTrabajoPK().getPueId(); //Obtengo el ultimo elemento (id de pue) para saber el id siguiente a ingresar
-        AdmPuePuestoTrabajoPK puePK = new AdmPuePuestoTrabajoPK(idPuesto + 1, id); //Creo la entidad ya con el id de puesto y id de dep
-        claseEntidad.setAdmPuePuestoTrabajoPK(puePK); //Ya se ingresa el objeto para poder hacer el insert
-
+        int idPuesto = puestos.get(puestos.size()-1).getAdmPuePuestoTrabajoPK().getPueId(); //Se obtiene el ultimo elemento (id puesto) ingresar el siguiente
+        AdmPuePuestoTrabajoPK puePK = new AdmPuePuestoTrabajoPK(idPuesto + 1, id); //Se crea la entidad con id de puesto y departamento
+        claseEntidad.setAdmPuePuestoTrabajoPK(puePK); 
+        
+        //Se valida que el salario minimo no sea mayor o igual al mayor
         if(claseEntidad.getPueSalarioMinimo() < claseEntidad.getPueSalarioMaximo()){
             claseEntidadControlador.insertarEntidad();
             Utilidades.mensajeExito("Ingresado correctamente");
@@ -57,9 +58,11 @@ public class PuestoManejador extends AbastractoManejador<AdmPuePuestoTrabajo>{
         
     }
     
-    public void actualizar(int id, AdmPuePuestoTrabajo puesto){        
+    public void actualizar(int id, AdmPuePuestoTrabajo puesto){  
+        //Se ingresa el departamento al que pertenece el puesto
         puesto.setAdmDepDepartamento((AdmDepDepartamento) claseEntidadControlador.encontrarPorId(id));
         
+        //Se valida que el salario minimo no sea mayor o igual al mayor
         if(puesto.getPueSalarioMinimo() < puesto.getPueSalarioMaximo()){
             claseEntidadControlador.actualizarEntidad(puesto);
             Utilidades.mensajeExito("Actualizado correctamente");

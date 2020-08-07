@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
  */
 public class DescuentoControlador extends AbstractoControlador<AdmDesDescuentoLey>{
     
+    //En el constructor se define la entidad
     public DescuentoControlador(AdmDesDescuentoLey descuento){
         super.ClaseEntidad = descuento;
     }

@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kik3o
+ * @author Enrique Ochoa
  */
 @Entity
 @Table(name = "ADM_DEP_DEPARTAMENTO", catalog = "PROYECTO04_ADMINISTRACION_EMPLEADOS", schema = "")

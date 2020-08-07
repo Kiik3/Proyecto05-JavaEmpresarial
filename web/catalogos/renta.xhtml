@@ -72,17 +72,11 @@
                                 </div>
                                 
                                 <div>
-                                    <p:commandButton action="#{rentaManejador.actualizar(ren)}" id="editar" update="growl, table" value="Actualizar" style="margin-top: 10px;"/>
+                                    <p:commandButton action="#{rentaManejador.actualizar(ren)}" id="editar" update="growl, table" value="Actualizar" />
                                 </div>
                             </p:dialog>
 
-                            <p:commandButton action="#{rentaManejador.eliminar(ren)}" id="eliminar" update="growl, table" icon="pi pi-trash" style="background-color: tomato; border-color: red" immediate="true">
-                                <p:confirm header="Confirmación" message="Está seguro?" icon="pi pi-exclamation-triangle" />
-                            </p:commandButton>
-                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                            </p:confirmDialog> 
+                             
                         </h:form>
                     </p:column>
 

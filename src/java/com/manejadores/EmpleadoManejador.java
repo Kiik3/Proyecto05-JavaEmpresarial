@@ -24,7 +24,7 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     
     private List<AdmEmpEmpleado> empleados = new ArrayList<AdmEmpEmpleado>();
     private List<AdmEmpEmpleado> jefes = new ArrayList<AdmEmpEmpleado>();
-    private boolean flagEstado = true;
+    private boolean flagEstado = true; //Bandera que determina si se muestra o no el inputText de estado
     
     @PostConstruct
     @Override
@@ -53,14 +53,16 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     
     @Override
     public void insertar(){
-        claseEntidad.getEstId().setEstId(1);
+        claseEntidad.getEstId().setEstId(1); //Se inserta estado Activo a cada nuevo empleado que se ingresa
         int i = claseEntidad.getPueId().getAdmPuePuestoTrabajoPK().getPueId();
-        AdmPuePuestoTrabajo puesto = (AdmPuePuestoTrabajo) claseEntidadControlador.encontrarPorId(i);
+        AdmPuePuestoTrabajo puesto = (AdmPuePuestoTrabajo) claseEntidadControlador.encontrarPorId(i); //Se obtiene la entidad puesto
         
+        //Se valida que no se ingrese un salario menor o mayor al rango ya establecido
         if(claseEntidad.getEmpSalario() < puesto.getPueSalarioMinimo() || claseEntidad.getEmpSalario() > puesto.getPueSalarioMaximo()){
             Utilidades.mensajeError("El salario según el puesto escogido no debe ser menor a " + puesto.getPueSalarioMinimo() + ", ni mayor a " + puesto.getPueSalarioMaximo());
         }
         else{
+            //Si el empleado no tiene jefe, se ingresa null
             if(claseEntidad.getEmpIdJefe().getEmpId() == null){
                 claseEntidadControlador.insertarEntidad();
                 Utilidades.mensajeExito("Realizado correctamente");

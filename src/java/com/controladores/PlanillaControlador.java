@@ -18,14 +18,17 @@ import javax.persistence.Query;
  */
 public class PlanillaControlador extends AbstractoControlador<AdmPlaPlanilla>{
     
+    //Se declaran e inicializan variables
     AdmPlaPlanilla planilla = new AdmPlaPlanilla ();
     public double totalIsss = 0, totalAfp = 0, totalRenta = 0;
     public double totalSalario= 0, totalDescuento = 0, totalPago = 0;
     
+    //En el constructor se define la entidad
     public PlanillaControlador(AdmPlaPlanilla planilla){
         super.ClaseEntidad = planilla;
     }
     
+    //Método que calcula el pago de planilla
     public List<AdmHisHistorialPago> calcularPlanilla(List<AdmDesDescuentoLey> listaDescuentos, List<AdmRenRenta> listaTramos) {
         List<AdmEmpEmpleado> listaEmpleados = new ArrayList<AdmEmpEmpleado>();
         List<AdmHisHistorialPago> listaHistorial = new ArrayList<AdmHisHistorialPago>();
@@ -53,7 +56,8 @@ public class PlanillaControlador extends AbstractoControlador<AdmPlaPlanilla>{
 
             pago = e.getEmpSalario() - (isss + afp + renta); //Calculo de pago total a empleado
             pago = Math.round(pago * 100) / 100d;
-
+            
+            //Ingresando al historial de pago
             AdmHisHistorialPago h = new AdmHisHistorialPago();
             h.setHisIdEmpleado(e.getEmpId());
             h.setHisNombreEmpleado(e.getEmpNombre());
@@ -66,14 +70,15 @@ public class PlanillaControlador extends AbstractoControlador<AdmPlaPlanilla>{
             
             listaHistorial.add(h); //Agregando un nuevo empleado con sus pagos a la planilla
             
+            //Calculando totales
             totalSalario = totalSalario + e.getEmpSalario();
             totalIsss = totalIsss + isss;
             totalAfp = totalAfp + afp;
             totalRenta = totalRenta + renta;
         }
+        //Calculando totales
         totalDescuento = totalIsss + totalAfp + totalRenta;
         totalPago = totalSalario - totalDescuento;
-        
         
         planilla.setPlaTotalSalario(totalSalario);
         planilla.setPlaTotalDescuento(totalDescuento);
@@ -82,6 +87,7 @@ public class PlanillaControlador extends AbstractoControlador<AdmPlaPlanilla>{
         return listaHistorial;
     }
     
+    //Selección de todos los empleados activos para efectos de paga la planilla
     public List<AdmEmpEmpleado> empleadosActivos(){
         em = getEntityManager();
         try {
@@ -98,6 +104,7 @@ public class PlanillaControlador extends AbstractoControlador<AdmPlaPlanilla>{
         }
     }
     
+    //Se seleccionan todos los pagos detallados de cada planilla
     public List<AdmHisHistorialPago> verDetallesPlanilla(int id){
         em = getEntityManager();
         try {
@@ -118,7 +125,8 @@ public class PlanillaControlador extends AbstractoControlador<AdmPlaPlanilla>{
     public EntityManager getEntityManager() {
         return ConexionBD.getInstance().getEntityManagerFactory().createEntityManager();
     }
-
+    
+    //Se encuentra una planilla por su id
     @Override
     public Object encontrarPorId(int id) {
         em = getEntityManager();

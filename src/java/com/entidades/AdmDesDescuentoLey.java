@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kik3o
+ * @author Enrique Ochoa
  */
 @Entity
 @Table(name = "ADM_DES_DESCUENTO_LEY", catalog = "PROYECTO04_ADMINISTRACION_EMPLEADOS", schema = "")

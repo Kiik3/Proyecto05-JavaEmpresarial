@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
  */
 public class RolControlador extends AbstractoControlador<AdmRolRol>{
     
+    //En el constructor se define la entidad
     public RolControlador(AdmRolRol rol){
         super.ClaseEntidad = rol;
     }

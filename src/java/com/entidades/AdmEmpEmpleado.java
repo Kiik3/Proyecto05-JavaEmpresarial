@@ -234,5 +234,5 @@ public class AdmEmpEmpleado implements Serializable {
     public String toString() {
         return "com.entidades.AdmEmpEmpleado[ empId=" + empId + " ]";
     }
-    
+
 }

@@ -14,10 +14,12 @@ import javax.persistence.Query;
  */
 public class HistorialControlador extends AbstractoControlador<AdmHisHistorialPago>{
     
+    //En el constructor se define la entidad
     public HistorialControlador(AdmHisHistorialPago historial){
         super.ClaseEntidad = historial;
     }
     
+    //Se seleccionan los empleados que pertenecen a una misma planilla de pagos
     @Override
     public List<AdmHisHistorialPago> encontrarEntidades(){
         em = getEntityManager();

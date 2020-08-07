@@ -21,7 +21,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author kik3o
+ * @author Enrique Ochoa
  */
 @Entity
 @Table(name = "ADM_ROL_ROL", catalog = "PROYECTO04_ADMINISTRACION_EMPLEADOS", schema = "")
