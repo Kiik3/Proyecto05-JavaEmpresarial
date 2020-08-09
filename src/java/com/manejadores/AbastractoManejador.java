@@ -4,7 +4,7 @@ package com.manejadores;
 import com.controladores.AbstractoControlador;
 import java.util.ArrayList;
 import java.util.List;
-import utilidades.Utilidades;
+import com.utilidades.Utilidades;
 
 /**
  *

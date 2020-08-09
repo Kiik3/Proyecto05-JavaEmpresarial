@@ -1,8 +1,10 @@
 
 package com.manejadores;
 
+import com.controladores.FechaPagoControlador;
 import com.controladores.HistorialControlador;
 import com.controladores.PlanillaControlador;
+import com.entidades.AdmFecFechaPago;
 import com.entidades.AdmHisHistorialPago;
 import com.entidades.AdmPlaPlanilla;
 import com.propiedades.Propiedades;
@@ -14,7 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import utilidades.Utilidades;
+import com.utilidades.Utilidades;
 
 /**
  *
@@ -30,6 +32,9 @@ public class PlanillaManejador {
     
     private AdmHisHistorialPago historial;
     private HistorialControlador historialControlador;
+    
+    private AdmFecFechaPago admFecFechaPago;
+    private FechaPagoControlador fechaPagoControlador;
     
     //Inyecciones de manejadores
     @ManagedProperty(value = "#{incioSesionManejador}")
@@ -61,14 +66,16 @@ public class PlanillaManejador {
         planilla.setPlaTotalPago(planillaControlador.totalPago);
         planillas = planillaControlador.encontrarEntidades();
         
+        admFecFechaPago = new AdmFecFechaPago();
+        fechaPagoControlador = new FechaPagoControlador(admFecFechaPago);
         historial = new AdmHisHistorialPago();
         flagVerDetalles = false;
 
     }
     //Pago de planilla
     public void pagar(){
-        byte fechaPago = Byte.parseByte(propiedades.cargarFechaPla().getProperty("fecha"));
-        boolean pagar = Boolean.valueOf(propiedades.cargarPagarPla().getProperty("pagar"));
+        int fechaPago = fechaPagoControlador.encontrarPorId(1).getFecFecha();
+        boolean pagar = Boolean.valueOf(fechaPagoControlador.encontrarPorId(1).getFecPagar());
         //Se valida que se día de pago
         if(!pagar){
             Utilidades.mensajeError("No, se pudo pagar, fecha de pago: " + fechaPago + " de cada mes");
@@ -87,7 +94,10 @@ public class PlanillaManejador {
             Utilidades.mensajeExito("Planilla pagada correctamente");
             inicializar();
 
-            propiedades.insertarPagar("pagar", "false");
+            admFecFechaPago = fechaPagoControlador.encontrarPorId(1);
+            
+            admFecFechaPago.setFecPagar("false");
+            fechaPagoControlador.actualizarEntidad(admFecFechaPago);
             sesion.avisoPagoPlanilla();
         }
 

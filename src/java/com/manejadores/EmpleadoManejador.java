@@ -11,7 +11,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import utilidades.Utilidades;
+import com.utilidades.Utilidades;
 
 /**
  *
@@ -42,7 +42,7 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     @Override
     public void nuevaEntidad(){
         claseEntidad = new AdmEmpEmpleado();
-        claseEntidad.setEstId(new AdmEstEstado());
+        claseEntidad.setEstId(new AdmEstEstado(1)); //Se inserta estado Activo a cada nuevo empleado que se ingresa
         claseEntidad.setEmpIdJefe(new AdmEmpEmpleado());
         claseEntidad.setPueId(new AdmPuePuestoTrabajo(new AdmPuePuestoTrabajoPK()));
         claseEntidadControlador = new EmpleadoControlador(claseEntidad);
@@ -53,18 +53,24 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
     
     @Override
     public void insertar(){
-        claseEntidad.getEstId().setEstId(1); //Se inserta estado Activo a cada nuevo empleado que se ingresa
-        int i = claseEntidad.getPueId().getAdmPuePuestoTrabajoPK().getPueId();
-        AdmPuePuestoTrabajo puesto = (AdmPuePuestoTrabajo) claseEntidadControlador.encontrarPorId(i); //Se obtiene la entidad puesto
         
         //Se valida que no se ingrese un salario menor o mayor al rango ya establecido
-        if(claseEntidad.getEmpSalario() < puesto.getPueSalarioMinimo() || claseEntidad.getEmpSalario() > puesto.getPueSalarioMaximo()){
-            Utilidades.mensajeError("El salario según el puesto escogido no debe ser menor a " + puesto.getPueSalarioMinimo() + ", ni mayor a " + puesto.getPueSalarioMaximo());
+        if(claseEntidad.getEmpSalario() < claseEntidad.getPueId().getPueSalarioMinimo() || claseEntidad.getEmpSalario() > claseEntidad.getPueId().getPueSalarioMaximo()){
+            Utilidades.mensajeError("El salario según el puesto escogido no debe ser menor a " + claseEntidad.getPueId().getPueSalarioMinimo() + ", ni mayor a " + claseEntidad.getPueId().getPueSalarioMaximo());
+            System.out.println("Entra a validacion");
+            inicializar();
         }
         else{
-            //Si el empleado no tiene jefe, se ingresa null
-            if(claseEntidad.getEmpIdJefe().getEmpId() == null){
+            //Si el nuevo empleado no tiene jefe, se ingresa null
+            if(claseEntidad.getEmpIdJefe() == null && claseEntidad.getEmpId() == null){
                 claseEntidadControlador.insertarEntidad();
+                Utilidades.mensajeExito("Realizado correctamente");
+                inicializar();
+            }
+            //Si el empleado a actualizar no tiene jefe, se ingresa null
+            else if(claseEntidad.getEmpIdJefe() == null ){
+                claseEntidadControlador.actualizarNativo(claseEntidad);
+                System.out.println("Actualizo jefe nulo");
                 Utilidades.mensajeExito("Realizado correctamente");
                 inicializar();
             }
@@ -76,7 +82,7 @@ public class EmpleadoManejador extends AbastractoManejador<AdmEmpEmpleado>{
         }
    
     }
-
+    
     public List<AdmEmpEmpleado> getEmpleados() {
         return empleados;
     }

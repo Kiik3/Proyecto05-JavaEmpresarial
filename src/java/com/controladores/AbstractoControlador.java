@@ -1,8 +1,6 @@
 
 package com.controladores;
 
-import com.conexionBD.ConexionBD;
-import com.entidades.AdmRolRol;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -96,6 +94,10 @@ public abstract class AbstractoControlador<T> {
     
     public List<T> encontrarPuestos(int id){
         return ListaEntidad;
+    }
+    
+    public void actualizarNativo(T entidad){
+
     }
     
     //Método abstracto para obtener el Manejador de Entidades de la BD

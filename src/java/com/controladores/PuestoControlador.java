@@ -39,6 +39,24 @@ public class PuestoControlador extends AbstractoControlador<AdmPuePuestoTrabajo>
         }
     }
     
+    public AdmPuePuestoTrabajo encontrarPorIdPuestos(int id){
+        em = getEntityManager();
+        AdmPuePuestoTrabajo pueEncontrado = new AdmPuePuestoTrabajo();
+        try {
+            Query q = em.createQuery("SELECT u FROM AdmPuePuestoTrabajo u WHERE u.admPuePuestoTrabajoPK.pueId = :id");
+            q.setParameter("id", id);
+            pueEncontrado = (AdmPuePuestoTrabajo) q.getSingleResult();
+            
+            return pueEncontrado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            em.close();
+        }
+    }
+    
     //Se seleccionan los puestos que pertenezcan a cierto departamento
     @Override
     public List<AdmPuePuestoTrabajo> encontrarPuestos(int id){

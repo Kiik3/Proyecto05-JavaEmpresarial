@@ -27,10 +27,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.cdi-api-2.0.SP1.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.commons-email-1.5.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -100,6 +96,10 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.mysql-connector-java-8.0.20.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.cdi-api-2.0.SP1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

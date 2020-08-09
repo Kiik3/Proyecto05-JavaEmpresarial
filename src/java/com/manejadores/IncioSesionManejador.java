@@ -1,8 +1,10 @@
 
 package com.manejadores;
 
+import com.controladores.FechaPagoControlador;
 import com.controladores.UsuarioControlador;
 import com.correo.CorreoElectronico;
+import com.entidades.AdmFecFechaPago;
 import com.entidades.AdmUsuUsuario;
 import com.propiedades.Encriptador;
 import com.propiedades.Propiedades;
@@ -12,7 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.apache.commons.mail.EmailException;
-import utilidades.Utilidades;
+import com.utilidades.Utilidades;
 
 /**
  *
@@ -25,6 +27,8 @@ public class IncioSesionManejador {
     
     private AdmUsuUsuario usuario;
     AdmUsuUsuario usuarioEncontrado;
+    private AdmFecFechaPago admFecFechaPago;
+    private FechaPagoControlador fechaPagoControlador;
     private UsuarioControlador usuarioControlador;
     private CorreoElectronico correoElectronico = new CorreoElectronico();
     private int codigoAutenticacion;
@@ -34,13 +38,15 @@ public class IncioSesionManejador {
     Encriptador enc = new Encriptador();
     Propiedades propiedades = new Propiedades();
     GregorianCalendar gc = new GregorianCalendar();
-    private String fechaPago;
+    private int fechaPago;
     
     @PostConstruct
     public void inicializar(){
         usuario = new AdmUsuUsuario();
         usuarioEncontrado = new AdmUsuUsuario();
         usuarioControlador = new UsuarioControlador(usuario);
+        admFecFechaPago = new AdmFecFechaPago();
+        fechaPagoControlador = new FechaPagoControlador(admFecFechaPago);
         flagAutenticacion = false;
         aviso = false;
         numero = 1;
@@ -81,11 +87,15 @@ public class IncioSesionManejador {
     public void validarCodigo() throws IOException{
 
         byte fechaHoy = (byte) gc.get(GregorianCalendar.DAY_OF_MONTH); //Se obtiene la fecha de hoy
-        fechaPago = propiedades.cargarFechaPla().getProperty("fecha");
+        fechaPago = fechaPagoControlador.encontrarPorId(numero).getFecFecha();
         
          //Tres días anteriores al pago de planilla, se activa el pago
-        if(fechaHoy == Byte.parseByte(fechaPago)-3){
-            propiedades.insertarPagar("pagar", "true");
+        if(fechaHoy == fechaPago-3){
+//            propiedades.insertarPagar("pagar", "true");
+            fechaPagoControlador.encontrarPorId(numero).setFecPagar("true");
+
+            admFecFechaPago.setFecPagar("true");
+            fechaPagoControlador.actualizarEntidad(admFecFechaPago);
         }
         
         //Se valida que el código introducido sea el mismo al que se envió al correo
@@ -144,25 +154,29 @@ public class IncioSesionManejador {
         }
     }
     //Permite al administrador modificar el día de pago de planilla
-    public void cambiarFecha(String fecha){
+    public void cambiarFecha(int fecha){
         
-        if(Byte.parseByte(fecha) <= 0 || Byte.parseByte(fecha) >= 31){
+        if(fecha <= 0 || fecha >= 31){
             Utilidades.mensajeError("Fecha incorrecta, debe ser entre 1 y 30");
         }
         else{
-            propiedades.insertarPla("fecha", fecha);
-            propiedades.insertarPagar("pagar", "true");
+            admFecFechaPago = fechaPagoControlador.encontrarPorId(numero);
+            
+            admFecFechaPago.setFecFecha(fecha);
+            admFecFechaPago.setFecPagar("true");
+            fechaPagoControlador.actualizarEntidad(admFecFechaPago);
+
             Utilidades.mensajeExito("Fecha de pago actualizada correctamente");
         }
     }
     //Aviso que se muestta si el día actual es pago de planilla
     public void avisoPagoPlanilla(){
         byte fechaHoy = (byte) gc.get(GregorianCalendar.DAY_OF_MONTH); //Se obtiene la fecha de hoy
+        
+        fechaPago = fechaPagoControlador.encontrarPorId(numero).getFecFecha();
+        boolean pagar = Boolean.valueOf(fechaPagoControlador.encontrarPorId(numero).getFecPagar());
 
-        fechaPago = propiedades.cargarFechaPla().getProperty("fecha");
-        boolean pagar = Boolean.valueOf(propiedades.cargarPagarPla().getProperty("pagar"));
-
-        if(fechaHoy == Byte.parseByte(fechaPago) && pagar){
+        if(fechaHoy == fechaPago && pagar){
             System.out.println("Se mete a aviso");
             aviso = true;
         }
@@ -211,11 +225,11 @@ public class IncioSesionManejador {
         this.aviso = aviso;
     }
 
-    public String getFechaPago() {
+    public int getFechaPago() {
         return fechaPago;
     }
 
-    public void setFechaPago(String fechaPago) {
+    public void setFechaPago(int fechaPago) {
         this.fechaPago = fechaPago;
     }
 

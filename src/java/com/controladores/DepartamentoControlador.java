@@ -4,6 +4,7 @@ package com.controladores;
 import com.conexionBD.ConexionBD;
 import com.entidades.AdmDepDepartamento;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -22,8 +23,22 @@ public class DepartamentoControlador extends AbstractoControlador<AdmDepDepartam
     }
 
     @Override
-    public Object encontrarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AdmDepDepartamento encontrarPorId(int id) {
+        em = getEntityManager();
+        AdmDepDepartamento depEncontrado = new AdmDepDepartamento();
+        try {
+            Query q = em.createQuery("SELECT u FROM AdmDepDepartamento u WHERE u.depId = :id");
+            q.setParameter("id", id);
+            depEncontrado = (AdmDepDepartamento) q.getSingleResult();
+            
+            return depEncontrado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            em.close();
+        }
     }
     
 }

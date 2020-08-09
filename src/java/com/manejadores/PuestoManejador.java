@@ -10,7 +10,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import utilidades.Utilidades;
+import com.utilidades.Utilidades;
 
 /**
  *
@@ -74,8 +74,8 @@ public class PuestoManejador extends AbastractoManejador<AdmPuePuestoTrabajo>{
         
     }
     
-    public void puestosSegunDepartamento(int idDep){
-        puestosSegunDepartamento = claseEntidadControlador.encontrarPuestos(idDep);
+    public void puestosSegunDepartamento(AdmDepDepartamento dep){
+        puestosSegunDepartamento = claseEntidadControlador.encontrarPuestos(dep.getDepId());
     }
 
     public List<AdmPuePuestoTrabajo> getPuestos() {

@@ -20,8 +20,8 @@ public class Propiedades {
     private static String CONFIGURACION = "configuracion.properties";
 //    private static String RUTA = "pagarplanilla.properties";
 //    private static String RUTAPLA = "fechaplanilla.properties";
-    private static String RUTA = System.getProperty("jboss.server.data.dir") + "/pagarplanilla.properties";
-    private static String RUTAPLA = System.getProperty("jboss.server.data.dir") + "/fechaplanilla.properties";
+    private static String RUTA = System.getProperty("jboss.server.temp.dir") + "/pagarplanilla.properties";
+    private static String RUTAPLA = System.getProperty("jboss.server.temp.dir") + "/fechaplanilla.properties";
     
     public InputStream getResourcesInputAsStream(String configuracion){
         return Propiedades.class.getResourceAsStream(configuracion);

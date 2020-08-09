@@ -4,6 +4,7 @@ package com.controladores;
 import com.conexionBD.ConexionBD;
 import com.entidades.AdmEstEstado;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,8 +18,22 @@ public class EstadoControlador extends AbstractoControlador<AdmEstEstado>{
     }
     
     @Override
-    public Object encontrarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AdmEstEstado encontrarPorId(int id) {
+        em = getEntityManager();
+        AdmEstEstado fechaPago = new AdmEstEstado();
+        try {
+            Query q = em.createQuery("SELECT u FROM AdmEstEstado u WHERE u.estId = :id");
+            q.setParameter("id", id);
+            fechaPago = (AdmEstEstado) q.getSingleResult();
+            
+            return fechaPago;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            em.close();
+        }
     }
 
     @Override
